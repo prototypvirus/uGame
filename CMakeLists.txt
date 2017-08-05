@@ -4,5 +4,5 @@ add_definitions(-D_OS_UNIX)
 
 set(CMAKE_CXX_STANDARD 11)
 include_directories(include)
-set(SOURCE_FILES src/main.cpp src/utils/Utils.cpp include/utils/Utils.h include/Constants.h)
+set(SOURCE_FILES src/main.cpp src/utils/Utils.cpp include/utils/Utils.h include/Constants.h src/utils/Logger.cpp include/utils/Logger.h)
 add_executable(uGame ${SOURCE_FILES})
