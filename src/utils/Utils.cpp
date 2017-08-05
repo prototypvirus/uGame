@@ -68,6 +68,5 @@ bool Utils::isFileExists(const std::string &file) {
 }
 
 void Utils::prepareDirectory(const std::string &dir) {
-    std::string& appDir = Utils::getHome();
-    Utils::createDirectory(appDir);
+    Utils::createDirectory(dir);
 }
