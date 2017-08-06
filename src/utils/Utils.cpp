@@ -7,6 +7,8 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <pwd.h>
+#include <fstream>
+#include <utils/MD5.h>
 
 std::string Utils::getHome() {
     std::string dir("");
@@ -65,4 +67,15 @@ bool Utils::isFileExists(const std::string &file) {
 
 void Utils::prepareDirectory(const std::string &dir) {
     Utils::createDirectory(dir);
+}
+
+std::string Utils::hashFile(const std::string file) {
+    std::ifstream stream(file);
+    unsigned char buffer[256];
+    MD5 md5;
+    while(stream.read(reinterpret_cast<char *>(buffer), 256)) {
+        md5.append(buffer, stream.gcount());
+    }
+    stream.close();
+    return md5.finish();
 }
