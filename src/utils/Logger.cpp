@@ -19,8 +19,7 @@ void Logger::clean() {
 }
 
 void Logger::log(const std::string &msg, Logger::Severity severity) {
-    switch(severity)
-    {
+    switch(severity) {
         case INFO:
             Logger::_file->write("[INFO] ", 7);
             break;
@@ -50,7 +49,7 @@ void Logger::err(const std::string &msg) {
 }
 
 void Logger::dbg(const std::string &msg) {
-//#ifndef DEBUG
+#ifndef _DEBUG
     Logger::log(msg, DEBUG);
-//#endif
+#endif
 }

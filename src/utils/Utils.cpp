@@ -8,7 +8,7 @@
 #include <sys/stat.h>
 #include <pwd.h>
 
-std::string& Utils::getHome() {
+std::string Utils::getHome() {
     std::string dir("");
 #ifdef _OS_IOS
 
@@ -20,16 +20,12 @@ std::string& Utils::getHome() {
 
 #elif _OS_UNIX
     struct passwd* pwd = getpwuid(getuid());
-    if (pwd)
-		{
-			dir = pwd->pw_dir;
-		}
-		else
-		{
-			dir = getenv("HOME");
-        }
-    if(!dir.empty())
-    {
+    if (pwd) {
+        dir = pwd->pw_dir;
+    } else {
+        dir = getenv("HOME");
+    }
+    if(!dir.empty()) {
         dir.append("/");
         dir.append(GAME_DIR);
     }
