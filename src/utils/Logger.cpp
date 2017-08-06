@@ -34,6 +34,7 @@ void Logger::log(const std::string &msg, Logger::Severity severity) {
             break;
     }
     Logger::_file->write(msg.c_str(), msg.length());
+    Logger::_file->write("\r\n", 2);
 }
 
 void Logger::info(const std::string &msg) {

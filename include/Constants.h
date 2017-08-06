@@ -11,6 +11,11 @@
 #define PACK_MAX 256
 #define GAME_SITE_HOST "http://localhost/"
 #define GAME_SITE_PORT 80
-#define GAME_SITE_UPD "resources"
+#define GAME_SITE_UPD "/game/resources.php"
+#define GAME_SITE_RES "/game/res/res_"
+#define GAME_RES_FILE "/res_"
+#define GAME_RES_DIR "/res"
+#define GAME_RES_EXT ".package"
+#define GAME_VERS_FILE "/version"
 
 #endif //UGAME_CONSTANTS_H

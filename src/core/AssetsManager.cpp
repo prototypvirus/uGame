@@ -6,6 +6,7 @@
 #include <cstring>
 #include <SFML/Network/Http.hpp>
 #include <SFML/System/FileInputStream.hpp>
+#include <sstream>
 #include "core/AssetsManager.h"
 #include "utils/Logger.h"
 #include "Constants.h"
@@ -15,11 +16,11 @@ AssetsManager::AssetsManager(const std::string &appDir) :
     _packages(),
     _entries() {
     L_INFO("Initialize AssetsManager");
-#ifdef _DEBUG
-    _dir.append("/res/");
-#else
-    _dir.append("/res_");
-#endif
+//#ifdef _DEBUG
+//    _dir.append(GAME_RES_DIR);
+//#else
+    _dir.append(GAME_RES_FILE);
+//#endif
     _state = EMPTY;
 }
 
@@ -31,7 +32,7 @@ void AssetsManager::scan() {
     L_INFO("Scan " + _dir + " for packages");
     _state = SCAN;
     for (int i = 0; i < PACK_MAX; ++i) {
-        std::string file(_dir + std::to_string(i) + ".package");
+        std::string file(_dir + std::to_string(i) + GAME_RES_EXT);
         if(!Utils::isFileExists(file))
             break;
         L_INFO("Found "+file);
@@ -92,22 +93,26 @@ void AssetsManager::read(const std::string &file) {
 }
 
 void AssetsManager::run() {
-#ifdef _DEBUG
+//#ifdef _DEBUG
+    std::string version(GAME_VERS);
     scan();
-    if(_state == NO_PACKAGES)
-        download();
-    else {
+    if(_state != NO_PACKAGES) {
         parse();
-        std::string version(GAME_VERS);
-        if(hasEntry("/version")) {
-            sf::InputStream* stream = getStream("/version");
+        if(hasEntry(GAME_VERS_FILE)) {
+            sf::InputStream* stream = getStream(GAME_VERS_FILE);
             char buffer[8];
             sf::Int64 len = stream->read(&buffer[0], 8);
             version.assign(buffer, static_cast<unsigned long>(len));
         }
-        checkUpdate(version);
+    }else
+        L_WARN("No packages available");
+    checkUpdate(version);
+    if(_state == UPDATES) {
+        download();
+        clean();
+        parse();
     }
-#endif
+//#endif
 }
 
 AssetsManager::State AssetsManager::getState() {
@@ -121,18 +126,60 @@ float AssetsManager::getProgress() {
 }
 
 void AssetsManager::download() {
-
+    while (!_downloads.empty()) {
+        struct Download d = _downloads.back();
+        _downloads.pop_back();
+        std::string web(GAME_SITE_RES + std::to_string(d.id) + GAME_RES_EXT);
+        std::string local(_dir + GAME_RES_FILE + std::to_string(d.id) + GAME_RES_EXT);
+        std::ofstream out(local);
+        sf::Http http(GAME_SITE_HOST, GAME_SITE_PORT);
+        sf::Http::Request req(web);
+        sf::Http::Response resp = http.sendRequest(req, sf::seconds(30.0f));
+        if(resp.getStatus() != sf::Http::Response::Ok) {
+            L_ERR("Can't download file: " + web);
+            continue;
+        }
+        //resp. //Need another way
+    }
 }
 
 void AssetsManager::checkUpdate(const std::string& version) {
+    L_INFO("Version check... ("+version+')');
     sf::Http http(GAME_SITE_HOST, GAME_SITE_PORT);
     sf::Http::Request req(GAME_SITE_UPD);
     req.setField("Game-Version", version);
     sf::Http::Response resp = http.sendRequest(req, sf::seconds(30.0f));
     if(resp.getStatus() != sf::Http::Response::Ok) {
-        _state = NO_INET;
+        _state = resp.getStatus()<1000?BAD_RESP:NO_INET;
+        L_ERR("No connection or bad response!");
         return;
     }
+    std::string body = resp.getBody();
+    if(body.length()%40 != 0) {
+        _state = BAD_RESP;
+        L_ERR("Bad response! (len: "+std::to_string(body.length())+')');
+        L_ERR(body);
+        return;
+    }
+    std::stringstream stream;
+    stream.write(body.c_str(), body.length());
+    char buffer[32];
+    std::string hash;
+    sf::Uint64 size;
+    L_INFO("Read response");
+    for(sf::Uint16 i = 0; i < body.length() / 40; i++) {
+        stream.read(reinterpret_cast<char *>(buffer), 32);
+        hash.assign(buffer, 32);
+        L_INFO("Package " + std::to_string(i) + " with hash " + hash);
+        stream.read(reinterpret_cast<char *>(&size), sizeof(sf::Uint64));
+        if(!checkHash(i, hash)) {
+            struct Download d;
+            d.id = i;
+            d.size = size;
+            _downloads.insert(_downloads.end(), d);
+        }
+    }
+    _state = _downloads.empty()?IDLE:UPDATES;
 }
 
 bool AssetsManager::hasEntry(const std::string &name) {
@@ -151,5 +198,17 @@ sf::InputStream *AssetsManager::getStream(const std::string &name) {
     struct Entry entry = _entries[name];
     return new PackageStream(entry.package, entry.offset, entry.size);
 #endif
+}
+
+bool AssetsManager::checkHash(sf::Uint16 id, const std::string &hash) {
+    L_INFO("Check hash");
+    std::string file = _dir + GAME_RES_FILE + std::to_string(id) + GAME_RES_EXT;
+    if(!Utils::isFileExists(file)) {
+        L_WARN("File not exists!");
+        return false;
+    }
+    std::string local = Utils::hashFile(file);
+    L_INFO("Hash: local " + local + " remote " + hash);
+    return hash == local;
 }
 

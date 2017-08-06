@@ -20,12 +20,17 @@ public:
         CHECK_INFO,
         NO_INET,
         NO_PACKAGES,
-        UPDATES
+        UPDATES,
+        BAD_RESP
     };
     struct Entry {
         sf::Uint64 offset;
         sf::Uint64 size;
         std::string package;
+    };
+    struct Download {
+        sf::Uint16 id;
+        sf::Uint64 size;
     };
     AssetsManager(const std::string& appDir);
     ~AssetsManager();
@@ -39,6 +44,7 @@ protected:
     State _state;
     std::string _dir;
     std::vector<std::string> _packages;
+    std::vector<Download> _downloads;
     std::unordered_map<std::string, Entry> _entries;
     float _progress;
     void scan();
@@ -47,6 +53,7 @@ protected:
     void read(const std::string& file);
     void download();
     void checkUpdate(const std::string& version);
+    bool checkHash(sf::Uint16 id, const std::string& hash);
 };
 
 
