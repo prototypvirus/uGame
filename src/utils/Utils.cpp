@@ -76,7 +76,6 @@ std::string Utils::hashFile(const std::string file) {
     std::ifstream stream(file, std::ifstream::binary);
     unsigned char buffer[1024];
     MD5 md5;
-    int total = 0;
     while(stream.read(reinterpret_cast<char *>(buffer), 1024)) {
         md5.update(buffer, stream.gcount());
     }
