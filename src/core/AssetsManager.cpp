@@ -7,6 +7,8 @@
 #include <SFML/Network/Http.hpp>
 #include <SFML/System/FileInputStream.hpp>
 #include <sstream>
+#include <netdb.h>
+#include <core/PackageStream.h>
 #include "core/AssetsManager.h"
 #include "utils/Logger.h"
 #include "Constants.h"
@@ -56,9 +58,7 @@ void AssetsManager::parse() {
 }
 
 void AssetsManager::clean() {
-    for(auto i = _entries.begin(); i != _entries.end(); ++i) {
-        _entries.erase(i->first);
-    }
+    _entries.clear();
 }
 
 void AssetsManager::read(const std::string &file) {
@@ -87,6 +87,7 @@ void AssetsManager::read(const std::string &file) {
         stream.read((char*)&entry.offset, sizeof(sf::Uint64));
         stream.read((char*)&entry.size, sizeof(sf::Uint64));
         _entries[name] = entry;
+        L_INFO("Add entry "+name);
     }
     L_INFO("Loaded " + std::to_string(count) + " entries");
     delete[] buffer;
@@ -101,13 +102,15 @@ void AssetsManager::run() {
         if(hasEntry(GAME_VERS_FILE)) {
             sf::InputStream* stream = getStream(GAME_VERS_FILE);
             char buffer[8];
-            sf::Int64 len = stream->read(&buffer[0], 8);
+            sf::Int64 len = stream->read((char*)buffer, 8);
             version.assign(buffer, static_cast<unsigned long>(len));
+            delete stream;
         }
     }else
         L_WARN("No packages available");
     checkUpdate(version);
-    if(_state == UPDATES) {
+    if(_state == UPDATES && !_downloads.empty()) {
+        L_INFO("Has files to download");
         download();
         clean();
         parse();
@@ -126,20 +129,58 @@ float AssetsManager::getProgress() {
 }
 
 void AssetsManager::download() {
+    if(_downloads.empty())
+        return;
+    float perFile = 100.0f / _downloads.size();
+    _progress = 0;
+    float last;
     while (!_downloads.empty()) {
+        last = _progress;
+        float current = 0;
         struct Download d = _downloads.back();
         _downloads.pop_back();
         std::string web(GAME_SITE_RES + std::to_string(d.id) + GAME_RES_EXT);
-        std::string local(_dir + GAME_RES_FILE + std::to_string(d.id) + GAME_RES_EXT);
-        std::ofstream out(local);
-        sf::Http http(GAME_SITE_HOST, GAME_SITE_PORT);
-        sf::Http::Request req(web);
-        sf::Http::Response resp = http.sendRequest(req, sf::seconds(30.0f));
-        if(resp.getStatus() != sf::Http::Response::Ok) {
-            L_ERR("Can't download file: " + web);
-            continue;
+        std::string local(_dir + std::to_string(d.id) + GAME_RES_EXT);
+        L_INFO("Start "+web+" -> "+local);
+        int sock = connect(web);
+        if(sock < 1) {
+            L_ERR("Not connected!");
+            _state = NO_INET;
+            return;
         }
-        //resp. //Need another way
+        bool headerEnd = false;
+        sf::Int64 fileLen = 0;
+        sf::Int64 loadLen = 0;
+        char* buffer[1024];
+        std::ofstream file(local, std::ofstream::binary);
+        while(1) {
+            ssize_t r = recv(sock, buffer, 1024, 0);
+            if(r == 0)
+                break;
+            if(headerEnd) {
+                file.write((char*)buffer, r);
+                loadLen += r;
+                current = (loadLen/(float)fileLen)*perFile;
+            }else{
+                std::string tmp((char*)buffer, r);
+                unsigned long pos = tmp.find("Content-Length");
+                if(pos != std::string::npos) {
+                    fileLen = std::stoll(tmp.substr(pos+15, tmp.find("\r\n", pos+15) - pos - 15));
+                    L_INFO("File size: "+std::to_string(fileLen));
+                }
+                pos = tmp.find("\r\n\r\n");
+                if(pos != std::string::npos) {
+                    headerEnd = true;
+                    file.write((char*)buffer+pos+4, r-pos-4);
+                    loadLen = static_cast<sf::Int64>(r - pos - 4);
+                    current = (loadLen/(float)fileLen)*perFile;
+                }
+            }
+            _progress = current + last;
+            L_INFO("Progress " + std::to_string(_progress));
+        }
+        file.flush();
+        file.close();
     }
 }
 
@@ -176,7 +217,7 @@ void AssetsManager::checkUpdate(const std::string& version) {
             struct Download d;
             d.id = i;
             d.size = size;
-            _downloads.insert(_downloads.end(), d);
+            _downloads.insert(_downloads.begin(), d);
         }
     }
     _state = _downloads.empty()?IDLE:UPDATES;
@@ -187,22 +228,22 @@ bool AssetsManager::hasEntry(const std::string &name) {
 }
 
 sf::InputStream *AssetsManager::getStream(const std::string &name) {
-#ifdef _DEBUG
-    std::string file(_dir + name);
+//#ifdef _DEBUG
+/*    std::string file(_dir + name);
     if(!Utils::isFileExists(file))
         return NULL;
     sf::FileInputStream* stream = new sf::FileInputStream();
     stream->open(file);
-    return stream;
-#else
+    return stream;*/
+//#else
     struct Entry entry = _entries[name];
     return new PackageStream(entry.package, entry.offset, entry.size);
-#endif
+//#endif
 }
 
 bool AssetsManager::checkHash(sf::Uint16 id, const std::string &hash) {
     L_INFO("Check hash");
-    std::string file = _dir + GAME_RES_FILE + std::to_string(id) + GAME_RES_EXT;
+    std::string file = _dir + std::to_string(id) + GAME_RES_EXT;
     if(!Utils::isFileExists(file)) {
         L_WARN("File not exists!");
         return false;
@@ -210,5 +251,32 @@ bool AssetsManager::checkHash(sf::Uint16 id, const std::string &hash) {
     std::string local = Utils::hashFile(file);
     L_INFO("Hash: local " + local + " remote " + hash);
     return hash == local;
+}
+
+int AssetsManager::connect(const std::string &url) {
+    struct addrinfo hints;
+    memset(&hints, 0, sizeof(hints));
+    hints.ai_family = AF_UNSPEC;
+    hints.ai_socktype = SOCK_STREAM;
+    struct addrinfo* info;
+    if(getaddrinfo(GAME_SITE_HOST, std::to_string(GAME_SITE_PORT).c_str(), &hints, &info) != 0) {
+        return -1;
+    }
+    int sock = socket(info->ai_family, info->ai_socktype, info->ai_protocol);
+    if(sock <= 0) {
+        return -1;
+    }
+    if(::connect(sock, info->ai_addr, info->ai_addrlen) != 0) {
+        return -1;
+    }
+    freeaddrinfo(info);
+    //Request
+    std::string req("GET "+url+" HTTP/1.0\r\n");
+    req.append("Host: ");
+    req.append(GAME_SITE_HOST);
+    req.append("\r\n");
+    req.append("Connection: close\r\n\r\n");
+    send(sock, req.c_str(), req.length(), 0);
+    return sock;
 }
 

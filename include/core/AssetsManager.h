@@ -54,6 +54,7 @@ protected:
     void download();
     void checkUpdate(const std::string& version);
     bool checkHash(sf::Uint16 id, const std::string& hash);
+    int connect(const std::string& url);
 };
 
 

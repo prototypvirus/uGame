@@ -9,6 +9,7 @@
 #include <pwd.h>
 #include <fstream>
 #include <utils/MD5.h>
+#include <utils/Logger.h>
 
 std::string Utils::getHome() {
     std::string dir("");
@@ -60,7 +61,9 @@ bool Utils::isFileExists(const std::string &file) {
 #elif _OS_DARWIN
 
 #elif _OS_UNIX
-    return access(file.c_str(), R_OK) == 0;
+    int acs = access(file.c_str(), R_OK);
+    L_INFO("Check file "+file+" and ... it's " + std::to_string(acs));
+    return acs == 0;
 #endif
     return false;
 }
@@ -70,12 +73,18 @@ void Utils::prepareDirectory(const std::string &dir) {
 }
 
 std::string Utils::hashFile(const std::string file) {
-    std::ifstream stream(file);
-    unsigned char buffer[256];
+    std::ifstream stream(file, std::ifstream::binary);
+    unsigned char buffer[1024];
     MD5 md5;
-    while(stream.read(reinterpret_cast<char *>(buffer), 256)) {
-        md5.append(buffer, stream.gcount());
+    int total = 0;
+    while(stream.read(reinterpret_cast<char *>(buffer), 1024)) {
+        md5.update(buffer, stream.gcount());
+    }
+    int last = stream.gcount();
+    if(last > 0) {
+        md5.update(buffer, last);
     }
     stream.close();
-    return md5.finish();
+    md5.finalize();
+    return md5.hexdigest();
 }
