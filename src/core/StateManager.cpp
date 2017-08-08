@@ -31,6 +31,15 @@ void StateManager::open(GameState *state) {
     _states.push_back(state);
 }
 
+void StateManager::replace(GameState *state) {
+    if(!_states.empty()) {
+        delete _states.back();
+        _states.pop_back();
+    }
+    open(state);
+}
+
+
 void StateManager::close() {
     if(!_states.empty()) {
         delete _states.back();

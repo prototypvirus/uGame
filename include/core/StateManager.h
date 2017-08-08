@@ -17,6 +17,7 @@ public:
     void init();
     void clean();
     void open(GameState* state);
+    void replace(GameState* state);
     void close();
     void event(const sf::Event& event);
     void update(const float time);
