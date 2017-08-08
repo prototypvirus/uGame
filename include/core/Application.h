@@ -6,6 +6,8 @@
 #define UGAME_APPLICATION_H
 
 #include <string>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Event.hpp>
 #include "AssetsManager.h"
 
 class Application {
@@ -16,6 +18,10 @@ public:
 
 protected:
     AssetsManager* _assets;
+    sf::RenderWindow* _window;
+    sf::Clock _clock;
+    bool _running;
+    void loop();
 };
 
 
