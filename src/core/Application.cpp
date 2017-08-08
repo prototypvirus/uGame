@@ -9,6 +9,7 @@
 Application::Application(const std::string &appDir) :
     _clock() {
     _assets = new AssetsManager(appDir);
+    _state = new StateManager(this);
     sf::VideoMode mode = sf::VideoMode::getDesktopMode();
     sf::Uint32 width = WIN_WIDTH;
     sf::Uint32 height = WIN_HEIGHT;
@@ -34,6 +35,7 @@ void Application::run() {
 
 void Application::loop() {
     _running = true;
+    _state->init();
     while (_window->isOpen()) {
         sf::Event event;
         while (_window->pollEvent(event)) {
@@ -55,15 +57,28 @@ void Application::loop() {
                 else
                     _window->setView(sf::View(sf::FloatRect(0, 0, event.size.width, event.size.height)));
             }
-
+            _state->event(event);
         }
         float time = _clock.restart().asSeconds();
+        _state->update(time);
         _window->clear(sf::Color::Black);
-        //draw
+        _state->draw(*_window, time);
         _window->display();
     }
 }
 
-void Application::quit() {
+void Application::quit() const {
     _window->close();
+}
+
+AssetsManager *Application::assets() const {
+    return _assets;
+}
+
+StateManager *Application::state() const {
+    return _state;
+}
+
+sf::RenderWindow *Application::window() const {
+    return _window;
 }

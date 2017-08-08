@@ -20,7 +20,7 @@ public:
     void close();
     void event(const sf::Event& event);
     void update(const float time);
-    void draw(const sf::RenderWindow& render, const float time);
+    void draw(sf::RenderWindow& render, const float time);
 
 protected:
     Application* _app;

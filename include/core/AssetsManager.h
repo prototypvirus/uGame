@@ -23,7 +23,8 @@ public:
         DOWNLOAD,
         NO_INET,
         NO_PACKAGES,
-        BAD_RESP
+        BAD_RESP,
+        COMPLETE
     };
     struct Entry {
         sf::Uint64 offset;

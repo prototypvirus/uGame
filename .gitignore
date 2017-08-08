@@ -1,7 +1,9 @@
 bin
 .idea
-symbx.png
+*.png
 profile
 assets/res/cfg/
 assets/uGamePackager.exe
 vgcore.*
+*.otf
+*.ttf

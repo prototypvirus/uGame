@@ -89,7 +89,7 @@ void AssetsManager::read(const std::string &file) {
         stream.read((char*)&entry.offset, sizeof(sf::Uint64));
         stream.read((char*)&entry.size, sizeof(sf::Uint64));
         _entries[name] = entry;
-        L_INFO("Add entry "+name);
+        //L_INFO("Add entry "+name+" at "+std::to_string(entry.offset)+" with size "+std::to_string(entry.size));
     }
     L_INFO("Loaded " + std::to_string(count) + " entries");
     delete[] buffer;
@@ -115,8 +115,12 @@ void AssetsManager::run() {
         L_INFO("Has files to download");
         download();
         clean();
+        scan();
         parse();
     }
+    if(_state == IDLE)
+        _state = COMPLETE;
+    L_INFO("End with status "+std::to_string(_state));
 //#endif
 }
 
@@ -180,7 +184,6 @@ void AssetsManager::download() {
                 }
             }
             _progress = current + last;
-            L_INFO("Progress " + std::to_string(_progress));
         }
         file.flush();
         file.close();

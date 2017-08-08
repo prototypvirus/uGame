@@ -2,7 +2,7 @@
 // Created by symbx on 08.08.17.
 //
 
-#include "core/StateManager.h"
+#include <state/StateLoading.h>
 
 StateManager::StateManager(Application *app) :
     _states() {
@@ -14,7 +14,9 @@ StateManager::~StateManager() {
 }
 
 void StateManager::init() {
-    //Add loading state
+    if(!_states.empty())
+        clean();
+    open(new StateLoading());
 }
 
 void StateManager::clean() {
@@ -56,7 +58,7 @@ void StateManager::update(const float time) {
         _states.back()->update(time);
 }
 
-void StateManager::draw(const sf::RenderWindow &render, const float time) {
+void StateManager::draw(sf::RenderWindow &render, const float time) {
     /*for(auto& i : _states) {
         if(i->isPassiveDraw())
             i->draw(render, time);
