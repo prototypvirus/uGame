@@ -10,8 +10,8 @@ Application::Application(const std::string &appDir) :
     _clock() {
     _assets = new AssetsManager(appDir);
     sf::VideoMode mode = sf::VideoMode::getDesktopMode();
-    int width = WIN_WIDTH;
-    int height = WIN_HEIGHT;
+    sf::Uint32 width = WIN_WIDTH;
+    sf::Uint32 height = WIN_HEIGHT;
     if(width > mode.width)
         width = mode.width;
     if(height > mode.height)
@@ -62,4 +62,8 @@ void Application::loop() {
         //draw
         _window->display();
     }
+}
+
+void Application::quit() {
+    _window->close();
 }

@@ -15,6 +15,7 @@ public:
     Application(const std::string& appDir);
     ~Application();
     void run();
+    void quit();
 
 protected:
     AssetsManager* _assets;
