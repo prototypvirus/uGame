@@ -47,6 +47,7 @@ void AssetsManager::parse() {
     if(_packages.empty())
         return;
     L_INFO("Parsing packages");
+    _state = PARSE;
     clean();
     _progress = 0;
     float perFile = 100.0f / _packages.size();
@@ -55,6 +56,7 @@ void AssetsManager::parse() {
         _packages.pop_back();
         _progress += perFile;
     }
+    _state = IDLE;
 }
 
 void AssetsManager::clean() {
@@ -131,6 +133,7 @@ float AssetsManager::getProgress() {
 void AssetsManager::download() {
     if(_downloads.empty())
         return;
+    _state = DOWNLOAD;
     float perFile = 100.0f / _downloads.size();
     _progress = 0;
     float last;
@@ -182,10 +185,12 @@ void AssetsManager::download() {
         file.flush();
         file.close();
     }
+    _state = IDLE;
 }
 
 void AssetsManager::checkUpdate(const std::string& version) {
     L_INFO("Version check... ("+version+')');
+    _state = CHECK_INFO;
     sf::Http http(GAME_SITE_HOST, GAME_SITE_PORT);
     sf::Http::Request req(GAME_SITE_UPD);
     req.setField("Game-Version", version);

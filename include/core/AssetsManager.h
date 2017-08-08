@@ -17,10 +17,12 @@ public:
         EMPTY,
         IDLE,
         SCAN,
+        PARSE,
         CHECK_INFO,
+        UPDATES,
+        DOWNLOAD,
         NO_INET,
         NO_PACKAGES,
-        UPDATES,
         BAD_RESP
     };
     struct Entry {
