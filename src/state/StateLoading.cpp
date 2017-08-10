@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <SFML/System/InputStream.hpp>
 #include <utils/Logger.h>
+#include <state/StateMenu.h>
 #include "core/AssetsManager.h"
 #include "state/StateLoading.h"
 
@@ -81,7 +82,7 @@ void StateLoading::update(const float time) {
             setText("Not found local resources");
             break;
         case AssetsManager::COMPLETE:
-            setText("Complete...next state :D");
+            _app->state()->replace(new StateMenu());
             break;
         default:
             setText("Hmm...unknown state...");
