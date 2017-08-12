@@ -3,11 +3,11 @@
 #include "core/Application.h"
 
 int main() {
-    std::string appDir = Utils::getHome();
-    Utils::prepareDirectory(appDir);
-    Logger::init(appDir);
-    Application app(appDir);
+    std::string appDir = uGame::Utils::getHome();
+    uGame::Utils::prepareDirectory(appDir);
+    uGame::Logger::init(appDir);
+    uGame::Application app(appDir);
     app.run();
-    Logger::clean();
+    uGame::Logger::clean();
     return 0;
 }

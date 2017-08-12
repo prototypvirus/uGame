@@ -7,14 +7,20 @@
 
 #include <string>
 
-class Utils {
-public:
-    static std::string getHome();
-    static bool createDirectory(const std::string& dir);
-    static bool isFileExists(const std::string& file);
-    static void prepareDirectory(const std::string& dir);
-    static std::string hashFile(const std::string file);
-};
+namespace uGame {
 
+    class Utils {
+    public:
+        static std::string getHome();
+
+        static bool createDirectory(const std::string &dir);
+
+        static bool isFileExists(const std::string &file);
+
+        static void prepareDirectory(const std::string &dir);
+
+        static std::string hashFile(const std::string file);
+    };
+}
 
 #endif //UGAME_UTILS_H

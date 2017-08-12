@@ -9,22 +9,29 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <core/GameState.h>
 
-class Application;
+namespace uGame {
 
-class StateMenu : public GameState {
-public:
-    StateMenu();
-    ~StateMenu();
-    void init(const Application *app) override;
-    void event(const sf::Event &event) override;
-    void update(const float time) override;
-    void draw(sf::RenderWindow &render, const float time) override;
+    class Application;
 
-private:
-    Application* _app;
-    sf::Texture* _bgTexture;
-    sf::RectangleShape* _bg;
-};
+    class StateMenu : public GameState {
+    public:
+        StateMenu();
 
+        ~StateMenu();
+
+        void init(const Application *app) override;
+
+        void event(const sf::Event &event) override;
+
+        void update(const float time) override;
+
+        void draw(sf::RenderWindow &render, const float time) override;
+
+    private:
+        Application *_app;
+        sf::Texture *_bgTexture;
+        sf::RectangleShape *_bg;
+    };
+}
 
 #endif //UGAME_STATEMENU_H

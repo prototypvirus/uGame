@@ -11,24 +11,32 @@
 #include "AssetsManager.h"
 #include "StateManager.h"
 
-class Application {
-public:
-    Application(const std::string& appDir);
-    ~Application();
-    void run();
-    void quit() const;
-    AssetsManager* assets() const;
-    StateManager* state() const;
-    sf::RenderWindow* window() const;
+namespace uGame {
+    class Application {
+    public:
+        Application(const std::string &appDir);
 
-protected:
-    AssetsManager* _assets;
-    StateManager* _state;
-    sf::RenderWindow* _window;
-    sf::Clock _clock;
-    bool _running;
-    void loop();
-};
+        ~Application();
 
+        void run();
+
+        void quit() const;
+
+        AssetsManager *assets() const;
+
+        StateManager *state() const;
+
+        sf::RenderWindow *window() const;
+
+    protected:
+        AssetsManager *_assets;
+        StateManager *_state;
+        sf::RenderWindow *_window;
+        sf::Clock _clock;
+        bool _running;
+
+        void loop();
+    };
+}
 
 #endif //UGAME_APPLICATION_H

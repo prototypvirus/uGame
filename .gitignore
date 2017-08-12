@@ -2,8 +2,7 @@ bin
 .idea
 *.png
 profile
-assets/res/cfg/
-assets/uGamePackager.exe
+assets/*
 vgcore.*
 *.otf
 *.ttf
