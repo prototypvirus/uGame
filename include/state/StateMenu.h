@@ -8,6 +8,7 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <core/GameState.h>
+#include <gui/Window.h>
 
 namespace uGame {
 
@@ -31,6 +32,8 @@ namespace uGame {
         Application *_app;
         sf::Texture *_bgTexture;
         sf::RectangleShape *_bg;
+        Window* _menuFrame;
+        void centerContent(sf::Vector2u wsize);
     };
 }
 

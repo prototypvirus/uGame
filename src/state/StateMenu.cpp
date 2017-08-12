@@ -15,6 +15,7 @@ namespace uGame {
     StateMenu::~StateMenu() {
         delete _bgTexture;
         delete _bg;
+        delete _menuFrame;
     }
 
 
@@ -31,6 +32,8 @@ namespace uGame {
         _bg->setTextureRect(sf::IntRect(0, 0, wsize.x, wsize.y));
         _bg->setSize(sf::Vector2f(wsize.x, wsize.y));
         delete stream;
+        _menuFrame = new Window();
+        centerContent(app->window()->getSize());
     }
 
     void StateMenu::event(const sf::Event &event) {
@@ -39,9 +42,10 @@ namespace uGame {
                 _app->state()->close();
         }
         if (event.type == sf::Event::Resized) {
-            sf::Vector2u wsize = _app->window()->getSize();
+            sf::Vector2u wsize(event.size.width, event.size.height);
             _bg->setTextureRect(sf::IntRect(0, 0, wsize.x, wsize.y));
             _bg->setSize(sf::Vector2f(wsize.x, wsize.y));
+            centerContent(wsize);
         }
     }
 
@@ -51,5 +55,11 @@ namespace uGame {
 
     void StateMenu::draw(sf::RenderWindow &render, const float time) {
         render.draw(*_bg);
+        render.draw(*_menuFrame);
+    }
+
+    void StateMenu::centerContent(sf::Vector2u wsize) {
+        sf::Vector2u fsize = _menuFrame->getSize();
+        _menuFrame->setPosition((wsize.x-fsize.x)/2, (wsize.y-fsize.y)/2);
     }
 }
