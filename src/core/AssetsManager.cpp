@@ -25,11 +25,11 @@ namespace uGame {
     void AssetsManager::init(const std::string &appDir) {
         AssetsManager::_dir = appDir;
         L_INFO("Initialize AssetsManager");
-//#ifdef _DEBUG
-//      AssetsManager::_dir.append(GAME_RES_DIR);
-//#else
+#ifdef _DEBUG
+        AssetsManager::_dir.append(GAME_RES_DIR);
+#else
         AssetsManager::_dir.append(GAME_RES_FILE);
-//#endif
+#endif
         AssetsManager::_state = EMPTY;
     }
 
@@ -103,7 +103,7 @@ namespace uGame {
     }
 
     void AssetsManager::run() {
-//#ifdef _DEBUG
+#ifndef _DEBUG
         std::string version(GAME_VERS);
         AssetsManager::scan();
         if (AssetsManager::_state != NO_PACKAGES) {
@@ -127,7 +127,9 @@ namespace uGame {
         }
         if (AssetsManager::_state == IDLE)
             AssetsManager::_state = COMPLETE;
-//#endif
+#else
+        AssetsManager::_state = COMPLETE;
+#endif
     }
 
     AssetsManager::State AssetsManager::getState() {
@@ -242,17 +244,17 @@ namespace uGame {
     }
 
     sf::InputStream *AssetsManager::getStream(const std::string &name) {
-//#ifdef _DEBUG
-/*    std::string file(AssetsManager::_dir + name);
-    if(!Utils::isFileExists(file))
-        return NULL;
-    sf::FileInputStream* stream = new sf::FileInputStream();
-    stream->open(file);
-    return stream;*/
-//#else
+#ifdef _DEBUG
+        std::string file(AssetsManager::_dir + name);
+        if(!Utils::isFileExists(file))
+            return NULL;
+        sf::FileInputStream* stream = new sf::FileInputStream();
+        stream->open(file);
+        return stream;
+#else
         struct Entry entry = AssetsManager::_entries[name];
         return new PackageStream(entry.package, entry.offset, entry.size);
-//#endif
+#endif
     }
 
     bool AssetsManager::checkHash(sf::Uint16 id, const std::string &hash) {
