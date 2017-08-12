@@ -10,7 +10,7 @@ namespace uGame {
 
     Application::Application(const std::string &appDir) :
             _clock() {
-        _assets = new AssetsManager(appDir);
+        AssetsManager::init(appDir);
         _state = new StateManager(this);
         sf::VideoMode mode = sf::VideoMode::getDesktopMode();
         sf::Uint32 width = WIN_WIDTH;
@@ -26,7 +26,7 @@ namespace uGame {
 
     Application::~Application() {
         delete _window;
-        delete _assets;
+        AssetsManager::destroy();
     }
 
     void Application::run() {
@@ -71,10 +71,6 @@ namespace uGame {
 
     void Application::quit() const {
         _window->close();
-    }
-
-    AssetsManager *Application::assets() const {
-        return _assets;
     }
 
     StateManager *Application::state() const {

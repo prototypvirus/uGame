@@ -21,7 +21,7 @@ namespace uGame {
     void StateMenu::init(const Application *app) {
         _app = const_cast<Application *>(app);
         _bgTexture = new sf::Texture();
-        sf::InputStream *stream = app->assets()->getStream("/imgs/ui/bg.png");
+        sf::InputStream *stream = AssetsManager::getStream("/imgs/ui/bg.png");
         _bgTexture->loadFromStream(*stream);
         _bgTexture->setRepeated(true);
         _bg = new sf::RectangleShape();

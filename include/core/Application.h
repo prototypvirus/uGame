@@ -22,14 +22,11 @@ namespace uGame {
 
         void quit() const;
 
-        AssetsManager *assets() const;
-
         StateManager *state() const;
 
         sf::RenderWindow *window() const;
 
     protected:
-        AssetsManager *_assets;
         StateManager *_state;
         sf::RenderWindow *_window;
         sf::Clock _clock;

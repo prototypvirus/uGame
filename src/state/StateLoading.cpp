@@ -47,13 +47,13 @@ namespace uGame {
         _loadText->setString("Loading...");
         _loadText->setFillColor(base);
         centerContent(app->window()->getSize());
-        _work = new sf::Thread(&AssetsManager::run, app->assets());
+        _work = new sf::Thread(&AssetsManager::run);
         _work->launch();
     }
 
     void StateLoading::update(const float time) {
         _progressVisible = false;
-        switch (_app->assets()->getState()) {
+        switch (AssetsManager::getState()) {
             case AssetsManager::IDLE:
                 setText("Wait...");
                 break;
@@ -67,7 +67,7 @@ namespace uGame {
             case AssetsManager::DOWNLOAD:
                 setText("Downloading resources...");
                 _progressVisible = true;
-                setProgress(_app->assets()->getProgress());
+                setProgress(AssetsManager::getProgress());
                 break;
             case AssetsManager::UPDATES:
                 setText("Prepare downloading");
@@ -75,7 +75,7 @@ namespace uGame {
             case AssetsManager::PARSE:
                 setText("Reading resources...");
                 _progressVisible = true;
-                setProgress(_app->assets()->getProgress());
+                setProgress(AssetsManager::getProgress());
                 break;
             case AssetsManager::NO_INET:
                 setText("Can't connecto to site.");

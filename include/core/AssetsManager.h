@@ -38,43 +38,43 @@ namespace uGame {
             sf::Uint64 size;
         };
 
-        AssetsManager(const std::string &appDir);
+        static void init(const std::string &appDir);
 
-        ~AssetsManager();
+        static void destroy();
 
-        void run();
+        static void run();
 
-        State getState();
+        static State getState();
 
-        float getProgress();
+        static float getProgress();
 
-        bool hasEntry(const std::string &name);
+        static bool hasEntry(const std::string &name);
 
-        sf::InputStream *getStream(const std::string &name);
+        static sf::InputStream *getStream(const std::string &name);
 
     protected:
-        State _state;
-        std::string _dir;
-        std::vector<std::string> _packages;
-        std::vector<Download> _downloads;
-        std::unordered_map<std::string, Entry> _entries;
-        float _progress;
+        static State _state;
+        static std::string _dir;
+        static std::vector<std::string> _packages;
+        static std::vector<Download> _downloads;
+        static std::unordered_map<std::string, Entry> _entries;
+        static float _progress;
 
-        void scan();
+        static void scan();
 
-        void parse();
+        static void clean();
 
-        void clean();
+        static void parse();
 
-        void read(const std::string &file);
+        static void read(const std::string &file);
 
-        void download();
+        static void download();
 
-        void checkUpdate(const std::string &version);
+        static void checkUpdate(const std::string &version);
 
-        bool checkHash(sf::Uint16 id, const std::string &hash);
+        static bool checkHash(sf::Uint16 id, const std::string &hash);
 
-        int connect(const std::string &url);
+        static int connect(const std::string &url);
     };
 }
 
