@@ -18,6 +18,7 @@ namespace uGame {
     std::string AssetsManager::_dir;
     std::vector<std::string> AssetsManager::_packages;
     std::unordered_map<std::string, AssetsManager::Entry> AssetsManager::_entries;
+    std::unordered_map<std::string, sf::Font*> AssetsManager::_fonts;
     std::vector<AssetsManager::Download> AssetsManager::_downloads;
     AssetsManager::State AssetsManager::_state = AssetsManager::EMPTY;
     float AssetsManager::_progress = 0;
@@ -68,6 +69,7 @@ namespace uGame {
 
     void AssetsManager::clean() {
         AssetsManager::_entries.clear();
+        AssetsManager::_fonts.clear();
     }
 
     void AssetsManager::read(const std::string &file) {
@@ -130,6 +132,7 @@ namespace uGame {
 #else
         AssetsManager::_state = COMPLETE;
 #endif
+        AssetsManager::loadFonts();
     }
 
     AssetsManager::State AssetsManager::getState() {
@@ -240,7 +243,11 @@ namespace uGame {
     }
 
     bool AssetsManager::hasEntry(const std::string &name) {
+#ifdef _DEBUG
+        return Utils::isFileExists(AssetsManager::_dir + name);
+#else
         return AssetsManager::_entries.count(name) > 0;
+#endif
     }
 
     sf::InputStream *AssetsManager::getStream(const std::string &name) {
@@ -294,5 +301,45 @@ namespace uGame {
         req.append("Connection: close\r\n\r\n");
         send(sock, req.c_str(), req.length(), 0);
         return sock;
+    }
+
+    void AssetsManager::loadFonts() {
+        sf::Font* font = new sf::Font();
+        font->loadFromFile(FALLBACK_FONT);
+        AssetsManager::_fonts["fallback"] = font;
+        if(!AssetsManager::hasEntry("/cfg/fonts")) {
+            L_WARN("No fonts list, only fallback available.");
+            return;
+        }
+        sf::InputStream* stream = AssetsManager::getStream("/cfg/fonts");
+        sf::Uint8 count;
+        sf::Uint8 len;
+        std::string file;
+        std::string name;
+        char buffer[256];
+        stream->read(&count, 1);
+        for(sf::Uint8 i = 0; i < count; i++) {
+            stream->read(&len, 1);
+            memset(buffer, 0, 256);
+            stream->read(buffer, len);
+            name.assign(buffer, len);
+            stream->read(&len, 1);
+            memset(buffer, 0, 256);
+            stream->read(buffer, len);
+            file.assign(buffer, len);
+            font = new sf::Font();
+            sf::InputStream* fstr = AssetsManager::getStream(file);
+            font->loadFromStream(*fstr);
+            _fonts[name] = font;
+            L_INFO("Load font "+file+" as "+name);
+        }
+        delete stream;
+    }
+
+    sf::Font *AssetsManager::getFont(const std::string &font) {
+        if(AssetsManager::_fonts.count(font) > 0)
+            return AssetsManager::_fonts[font];
+        L_WARN("Font "+font+" not available, use fallback.");
+        return AssetsManager::_fonts["fallback"];
     }
 }

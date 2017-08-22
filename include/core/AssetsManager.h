@@ -10,6 +10,7 @@
 #include <SFML/Config.hpp>
 #include <SFML/System/InputStream.hpp>
 #include <unordered_map>
+#include <SFML/Graphics/Font.hpp>
 
 namespace uGame {
 
@@ -52,12 +53,15 @@ namespace uGame {
 
         static sf::InputStream *getStream(const std::string &name);
 
+        static sf::Font* getFont(const std::string& font);
+
     protected:
         static State _state;
         static std::string _dir;
         static std::vector<std::string> _packages;
         static std::vector<Download> _downloads;
         static std::unordered_map<std::string, Entry> _entries;
+        static std::unordered_map<std::string, sf::Font*> _fonts;
         static float _progress;
 
         static void scan();
@@ -75,6 +79,8 @@ namespace uGame {
         static bool checkHash(sf::Uint16 id, const std::string &hash);
 
         static int connect(const std::string &url);
+
+        static void loadFonts();
     };
 }
 

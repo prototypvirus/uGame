@@ -22,5 +22,6 @@
 #define GAME_RES_DIR    "/res"
 #define GAME_RES_EXT    ".package"
 #define GAME_VERS_FILE  "/cfg/version"
+#define FALLBACK_FONT   "DanaLibraryHand.otf"
 
 #endif //UGAME_CONSTANTS_H
