@@ -6,6 +6,7 @@
 #include <SFML/System/InputStream.hpp>
 #include <utils/Logger.h>
 #include <state/StateMenu.h>
+#include <Constants.h>
 #include "core/AssetsManager.h"
 #include "state/StateLoading.h"
 
@@ -40,7 +41,7 @@ namespace uGame {
         _progress->setSize(sf::Vector2f(10, 20));
         _progress->setFillColor(base);
         _font = new sf::Font();
-        _font->loadFromFile("DanaLibraryHand.otf");
+        _font->loadFromFile(FALLBACK_FONT);
         _loadText = new sf::Text();
         _loadText->setFont(*_font);
         _loadText->setCharacterSize(20);

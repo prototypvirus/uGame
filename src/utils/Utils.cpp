@@ -9,7 +9,6 @@
 #include <pwd.h>
 #include <fstream>
 #include <utils/MD5.h>
-#include <utils/Logger.h>
 
 namespace uGame {
 
@@ -64,7 +63,6 @@ namespace uGame {
 
 #elif _OS_UNIX
         int acs = access(file.c_str(), R_OK);
-        L_INFO("Check file " + file + " and ... it's " + std::to_string(acs));
         return acs == 0;
 #endif
         return false;

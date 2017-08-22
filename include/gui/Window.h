@@ -10,12 +10,13 @@
 #include <SFML/Graphics/Texture.hpp>
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/Sprite.hpp>
+#include <SFML/Graphics/Text.hpp>
 
 namespace uGame {
 
     class Window : public ControlsContainer {
     public:
-        Window();
+        Window(const std::wstring &title);
         ~Window();
         void setPosition(sf::Vector2u pos);
         void setPosition(sf::Uint32 x, sf::Uint32 y);
@@ -33,6 +34,7 @@ namespace uGame {
         sf::Transform _transform;
         sf::Vector2u _size;
         sf::VertexArray _vertex;
+        sf::Text _title;
     };
 }
 

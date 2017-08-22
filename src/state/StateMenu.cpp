@@ -32,7 +32,7 @@ namespace uGame {
         _bg->setTextureRect(sf::IntRect(0, 0, wsize.x, wsize.y));
         _bg->setSize(sf::Vector2f(wsize.x, wsize.y));
         delete stream;
-        _menuFrame = new Window();
+        _menuFrame = new Window(L"MENU");
         centerContent(app->window()->getSize());
     }
 
