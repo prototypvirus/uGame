@@ -64,8 +64,9 @@ namespace uGame {
 #elif _OS_UNIX
         int acs = access(file.c_str(), R_OK);
         return acs == 0;
-#endif
+#else
         return false;
+#endif
     }
 
     void Utils::prepareDirectory(const std::string &dir) {

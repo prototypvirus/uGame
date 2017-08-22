@@ -9,6 +9,7 @@
 #include <sstream>
 #include <netdb.h>
 #include <core/PackageStream.h>
+#include <core/Lang.h>
 #include "core/AssetsManager.h"
 #include "utils/Logger.h"
 #include "Constants.h"
@@ -133,6 +134,7 @@ namespace uGame {
         AssetsManager::_state = COMPLETE;
 #endif
         AssetsManager::loadFonts();
+        Lang::load();
     }
 
     AssetsManager::State AssetsManager::getState() {

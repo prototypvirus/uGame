@@ -5,7 +5,7 @@ add_definitions(-D_DEBUG)
 
 set(CMAKE_CXX_STANDARD 11)
 include_directories(include)
-set(SOURCE_FILES src/main.cpp src/utils/Utils.cpp include/utils/Utils.h include/Constants.h src/utils/Logger.cpp include/utils/Logger.h src/core/Application.cpp include/core/Application.h src/core/AssetsManager.cpp include/core/AssetsManager.h src/core/PackageStream.cpp include/core/PackageStream.h src/utils/MD5.cpp include/utils/MD5.h src/core/StateManager.cpp include/core/StateManager.h include/core/GameState.h src/state/StateLoading.cpp include/state/StateLoading.h src/state/StateMenu.cpp include/state/StateMenu.h src/gui/Control.cpp include/gui/Control.h src/gui/ControlsContainer.cpp include/gui/ControlsContainer.h src/gui/Window.cpp include/gui/Window.h)
+set(SOURCE_FILES src/main.cpp src/utils/Utils.cpp include/utils/Utils.h include/Constants.h src/utils/Logger.cpp include/utils/Logger.h src/core/Application.cpp include/core/Application.h src/core/AssetsManager.cpp include/core/AssetsManager.h src/core/PackageStream.cpp include/core/PackageStream.h src/utils/MD5.cpp include/utils/MD5.h src/core/StateManager.cpp include/core/StateManager.h include/core/GameState.h src/state/StateLoading.cpp include/state/StateLoading.h src/state/StateMenu.cpp include/state/StateMenu.h src/gui/Control.cpp include/gui/Control.h src/gui/ControlsContainer.cpp include/gui/ControlsContainer.h src/gui/Window.cpp include/gui/Window.h src/core/Lang.cpp include/core/Lang.h)
 add_executable(uGame ${SOURCE_FILES})
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake_modules")
 find_package(SFML REQUIRED system window graphics network audio)

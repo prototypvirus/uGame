@@ -16,7 +16,7 @@ namespace uGame {
 
     class Window : public ControlsContainer {
     public:
-        Window(const std::wstring &title);
+        Window(const sf::String &title);
         ~Window();
         void setPosition(sf::Vector2u pos);
         void setPosition(sf::Uint32 x, sf::Uint32 y);

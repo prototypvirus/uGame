@@ -7,7 +7,7 @@
 #include "gui/Window.h"
 
 namespace uGame {
-    Window::Window(const std::wstring &title) :
+    Window::Window(const sf::String &title) :
         _texture(),
         _vertex(sf::TrianglesStrip, 4),
         _title() {

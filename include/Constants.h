@@ -23,5 +23,6 @@
 #define GAME_RES_EXT    ".package"
 #define GAME_VERS_FILE  "/cfg/version"
 #define FALLBACK_FONT   "DanaLibraryHand.otf"
+#define FALLBACK_LANG   "en";
 
 #endif //UGAME_CONSTANTS_H

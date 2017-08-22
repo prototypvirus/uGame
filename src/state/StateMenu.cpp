@@ -4,6 +4,7 @@
 
 #include <SFML/Graphics/Sprite.hpp>
 #include <utils/Logger.h>
+#include <core/Lang.h>
 #include "state/StateMenu.h"
 #include "core/StateManager.h"
 #include "core/Application.h"
@@ -32,7 +33,7 @@ namespace uGame {
         _bg->setTextureRect(sf::IntRect(0, 0, wsize.x, wsize.y));
         _bg->setSize(sf::Vector2f(wsize.x, wsize.y));
         delete stream;
-        _menuFrame = new Window(L"MENU");
+        _menuFrame = new Window(Lang::get(0));
         centerContent(app->window()->getSize());
     }
 
