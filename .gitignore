@@ -6,3 +6,4 @@ assets/*
 vgcore.*
 *.otf
 *.ttf
+sdk/*
