@@ -35,9 +35,15 @@ namespace uGame {
         sf::FloatRect getGlobalBounds() const;
 
     protected:
+        enum State {
+            Normal,
+            Hover,
+            Press
+        };
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-        void setState(char state);
+        void setState(State state);
         bool _visible;
+        State _state;
         sf::Vector2f _size;
         sf::Texture _texture;
         sf::VertexArray _vertex;

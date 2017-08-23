@@ -35,6 +35,9 @@ namespace uGame {
         sf::RectangleShape *_bg;
         Window* _menuFrame;
         Button* _playBtn;
+        Button* _profBtn;
+        Button* _optsBtn;
+        Button* _exitBtn;
         void centerContent(sf::Vector2u wsize);
     };
 }

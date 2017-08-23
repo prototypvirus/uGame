@@ -18,6 +18,9 @@ namespace uGame {
         delete _bg;
         delete _menuFrame;
         delete _playBtn;
+        delete _profBtn;
+        delete _optsBtn;
+        delete _exitBtn;
     }
 
 
@@ -36,7 +39,13 @@ namespace uGame {
         delete stream;
         _menuFrame = new Window(Lang::get(0));
         _playBtn = new Button(Lang::get(1));
+        _profBtn = new Button(Lang::get(4));
+        _optsBtn = new Button(Lang::get(3));
+        _exitBtn = new Button(Lang::get(2));
         _menuFrame->addControl(_playBtn);
+        _menuFrame->addControl(_profBtn);
+        _menuFrame->addControl(_optsBtn);
+        _menuFrame->addControl(_exitBtn);
         centerContent(app->window()->getSize());
     }
 
@@ -51,10 +60,11 @@ namespace uGame {
             _bg->setSize(sf::Vector2f(wsize.x, wsize.y));
             centerContent(wsize);
         }
+        _menuFrame->event(event);
     }
 
     void StateMenu::update(const float time) {
-
+        _menuFrame->update(time);
     }
 
     void StateMenu::draw(sf::RenderWindow &render, const float time) {
@@ -67,5 +77,8 @@ namespace uGame {
         _menuFrame->setPosition((wsize.x-fsize.width)/2, (wsize.y-fsize.height)/2);
         sf::FloatRect btn = _playBtn->getLocalBounds();
         _playBtn->setPosition((fsize.width - btn.width)/2, 52);
+        _profBtn->setPosition((fsize.width - btn.width)/2, 52+btn.height);
+        _optsBtn->setPosition((fsize.width - btn.width)/2, 52+btn.height*2);
+        _exitBtn->setPosition((fsize.width - btn.width)/2, 52+btn.height*3);
     }
 }

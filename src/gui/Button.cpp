@@ -5,6 +5,7 @@
 #include <SFML/System/String.hpp>
 #include <core/AssetsManager.h>
 #include "gui/Button.h"
+#include "gui/ControlsContainer.h"
 
 namespace uGame {
 
@@ -30,7 +31,8 @@ namespace uGame {
         _vertex[3].position = sf::Vector2f(_size.x, _size.y);
         sf::FloatRect rect = _text.getLocalBounds();
         _text.setPosition((_size.x - rect.width)/2, (_size.y - rect.height)/2);
-        setState(0);
+        _state = Hover; //Fix for comparing in method
+        setState(Normal);
     }
 
     Button::~Button() {
@@ -52,12 +54,16 @@ namespace uGame {
         target.draw(_text, states);
     }
 
-    void Button::setState(char state) {
-        _vertex[0].texCoords = sf::Vector2f(0, state*_size.y);
-        _vertex[1].texCoords = sf::Vector2f(_size.x, state*_size.y);
-        state++;
-        _vertex[2].texCoords = sf::Vector2f(0, state*_size.y);
-        _vertex[3].texCoords = sf::Vector2f(_size.x, state*_size.y);
+    void Button::setState(State state) {
+        if(_state == state)
+            return;
+        _state = state;
+        char s = (char)state;
+        _vertex[0].texCoords = sf::Vector2f(0, s*_size.y);
+        _vertex[1].texCoords = sf::Vector2f(_size.x, s*_size.y);
+        s++;
+        _vertex[2].texCoords = sf::Vector2f(0, s*_size.y);
+        _vertex[3].texCoords = sf::Vector2f(_size.x, s*_size.y);
     }
 
     bool Button::isPress() {
@@ -66,7 +72,9 @@ namespace uGame {
 
     void Button::event(const sf::Event &event) {
         if(event.type == sf::Event::MouseMoved) {
-
+            //L_INFO("Mouse move "+std::to_string(event.mouseMove.x)+'x'+std::to_string(event.mouseMove.y));
+            sf::FloatRect rect = getGlobalBounds();
+            setState(rect.contains(event.mouseMove.x, event.mouseMove.y)?Hover:Normal);
         }
     }
 
@@ -79,6 +87,8 @@ namespace uGame {
     }
 
     sf::FloatRect Button::getGlobalBounds() const {
+        if(_parent != 0)
+            return _parent->getTransform().transformRect(getTransform().transformRect(getLocalBounds()));
         return getTransform().transformRect(getLocalBounds());
     }
 }
