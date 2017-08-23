@@ -128,13 +128,15 @@ namespace uGame {
             AssetsManager::scan();
             AssetsManager::parse();
         }
+        AssetsManager::loadFonts();
+        Lang::load();
         if (AssetsManager::_state == IDLE)
             AssetsManager::_state = COMPLETE;
 #else
-        AssetsManager::_state = COMPLETE;
-#endif
         AssetsManager::loadFonts();
         Lang::load();
+        AssetsManager::_state = COMPLETE;
+#endif
     }
 
     AssetsManager::State AssetsManager::getState() {

@@ -17,6 +17,7 @@ namespace uGame {
         delete _bgTexture;
         delete _bg;
         delete _menuFrame;
+        delete _playBtn;
     }
 
 
@@ -34,6 +35,8 @@ namespace uGame {
         _bg->setSize(sf::Vector2f(wsize.x, wsize.y));
         delete stream;
         _menuFrame = new Window(Lang::get(0));
+        _playBtn = new Button(Lang::get(1));
+        _menuFrame->addControl(_playBtn);
         centerContent(app->window()->getSize());
     }
 
@@ -60,7 +63,9 @@ namespace uGame {
     }
 
     void StateMenu::centerContent(sf::Vector2u wsize) {
-        sf::Vector2u fsize = _menuFrame->getSize();
-        _menuFrame->setPosition((wsize.x-fsize.x)/2, (wsize.y-fsize.y)/2);
+        sf::FloatRect fsize = _menuFrame->getLocalBounds();
+        _menuFrame->setPosition((wsize.x-fsize.width)/2, (wsize.y-fsize.height)/2);
+        sf::FloatRect btn = _playBtn->getLocalBounds();
+        _playBtn->setPosition((fsize.width - btn.width)/2, 52);
     }
 }

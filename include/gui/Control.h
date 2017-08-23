@@ -7,21 +7,24 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Drawable.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/Graphics/Transformable.hpp>
 
 namespace uGame {
 
-    class Control : public sf::Drawable {
+    class ControlsContainer;
+
+    class Control : public sf::Drawable, public sf::Transformable {
     public:
-        Control(Control* parent = 0);
-        virtual void setPosition(sf::Vector2f pos) = 0;
-        virtual sf::Vector2f getPosition() = 0;
-        virtual void setSize(sf::Vector2f size) = 0;
-        virtual sf::Vector2f getSize() = 0;
+        Control(ControlsContainer* parent = 0);
         virtual void setVisible(bool v) = 0;
         virtual bool isVisible() = 0;
+        virtual void event(const sf::Event& event) = 0;
+        virtual void update(const float time) = 0;
 
     protected:
-        Control* _parent;
+        ControlsContainer* _parent;
+        friend ControlsContainer;
     };
 }
 

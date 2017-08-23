@@ -9,6 +9,7 @@
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <core/GameState.h>
 #include <gui/Window.h>
+#include <gui/Button.h>
 
 namespace uGame {
 
@@ -33,6 +34,7 @@ namespace uGame {
         sf::Texture *_bgTexture;
         sf::RectangleShape *_bg;
         Window* _menuFrame;
+        Button* _playBtn;
         void centerContent(sf::Vector2u wsize);
     };
 }

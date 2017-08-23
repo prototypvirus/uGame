@@ -6,7 +6,7 @@
 
 namespace uGame {
 
-    Control::Control(Control *parent) {
+    Control::Control(ControlsContainer *parent) {
         _parent = parent;
     }
 }

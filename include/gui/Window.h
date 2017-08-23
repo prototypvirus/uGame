@@ -18,23 +18,23 @@ namespace uGame {
     public:
         Window(const sf::String &title);
         ~Window();
-        void setPosition(sf::Vector2u pos);
-        void setPosition(sf::Uint32 x, sf::Uint32 y);
-        sf::Vector2u getPosition();
-        void setSize(sf::Vector2u size);
-        void setSize(sf::Uint32 w, sf::Uint32 h);
-        sf::Vector2u getSize();
+
+        void event(const sf::Event &event) override;
+
+        void update(const float time) override;
+
+        sf::FloatRect getLocalBounds() const;
+
+        sf::FloatRect getGlobalBounds() const;
 
     protected:
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     private:
         sf::Texture _texture;
-        sf::Vector2u _pos;
-        sf::Transform _transform;
-        sf::Vector2u _size;
         sf::VertexArray _vertex;
         sf::Text _title;
+        sf::Vector2f _size;
     };
 }
 
