@@ -10,6 +10,7 @@
 
 namespace uGame {
     std::unordered_map<std::string, sf::Font *> UI::_fonts;
+    std::unordered_map<std::string, struct Layout *> UI::_layouts;
 
     void uGame::UI::loadFonts() {
         sf::Font *font = new sf::Font();
@@ -49,5 +50,59 @@ namespace uGame {
             return UI::_fonts[font];
         L_WARN("Font "+font+" not available, use fallback.");
         return UI::_fonts["fallback"];
+    }
+
+    Layout *UI::getLayout(const std::string &f) {
+        if(UI::_layouts.count(f) > 0)
+            return UI::_layouts[f];
+        return UI::loadLayout(f);
+    }
+
+    void UI::clean() {
+        for(auto& it : UI::_layouts) {
+            delete[] it.second->images;
+            delete[] it.second->rects;
+            delete[] it.second->points;
+        }
+        UI::_layouts.clear();
+    }
+
+    Layout *UI::loadLayout(const std::string &f) {
+        sf::InputStream* stream = AssetsManager::getStream(f);
+        if(stream == NULL)
+            return NULL;
+        Layout* lay = new Layout();
+        sf::Uint32 count;
+        char buffer[256];
+        stream->read(&count, 4);
+        lay->images = new std::string[count];
+        for (int i = 0; i < count; ++i) {
+            char len;
+            std::string img;
+            memset(buffer, 0, 256);
+            stream->read(&len, 1);
+            stream->read(buffer, len);
+            img.assign(buffer, len);
+            lay->images[i] = img;
+        }
+        stream->read(&count, 4);
+        lay->rects = new sf::IntRect[count];
+        for (int i = 0; i < count; ++i) {
+            sf::IntRect rect;
+            stream->read(&rect.left, 4);
+            stream->read(&rect.top, 4);
+            stream->read(&rect.width, 4);
+            stream->read(&rect.height, 4);
+        }
+        stream->read(&count, 4);
+        lay->points = new sf::Vector2u[count];
+        for (int i = 0; i < count; ++i) {
+            sf::Vector2u dot;
+            stream->read(&dot.x, 4);
+            stream->read(&dot.y, 4);
+        }
+        UI::_layouts[f] = lay;
+        delete stream;
+        return lay;
     }
 }

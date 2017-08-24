@@ -10,13 +10,27 @@
 #include <string>
 
 namespace uGame {
+    struct Layout {
+        std::string* images;
+        sf::IntRect* rects;
+        sf::Vector2u* points;
+    };
+
     class UI {
     public:
         static void loadFonts();
 
         static sf::Font* getFont(const std::string& font);
+
+        static struct Layout* getLayout(const std::string& f);
+
+        static void clean();
+
     protected:
         static std::unordered_map<std::string, sf::Font*> _fonts;
+        static std::unordered_map<std::string, struct Layout*> _layouts;
+
+        static struct Layout* loadLayout(const std::string& f);
     };
 }
 

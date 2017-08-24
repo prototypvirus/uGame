@@ -72,6 +72,7 @@ namespace uGame {
     void AssetsManager::clean() {
         AssetsManager::_entries.clear();
         AssetsManager::_fonts.clear();
+        UI::clean();
     }
 
     void AssetsManager::read(const std::string &file) {
