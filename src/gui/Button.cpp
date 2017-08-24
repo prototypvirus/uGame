@@ -73,7 +73,7 @@ namespace uGame {
     }
 
     void Button::event(const sf::Event &event) {
-        if(event.type == sf::Event::MouseMoved) {
+        if(event.type == sf::Event::MouseMoved && _state != Press) {
             sf::FloatRect rect = getGlobalBounds();
             setState(rect.contains(event.mouseMove.x, event.mouseMove.y) ? Hover : Normal);
         }

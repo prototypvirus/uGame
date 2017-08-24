@@ -78,9 +78,9 @@ namespace uGame {
         sf::FloatRect fsize = _menuFrame->getLocalBounds();
         _menuFrame->setPosition((wsize.x-fsize.width)/2, (wsize.y-fsize.height)/2);
         sf::FloatRect btn = _playBtn->getLocalBounds();
-        _playBtn->setPosition((fsize.width - btn.width)/2, 72);
-        _profBtn->setPosition((fsize.width - btn.width)/2, 72+btn.height);
-        _optsBtn->setPosition((fsize.width - btn.width)/2, 72+btn.height*2);
-        _exitBtn->setPosition((fsize.width - btn.width)/2, 72+btn.height*3);
+        _playBtn->setPosition((fsize.width - btn.width)/2, 82);
+        _profBtn->setPosition((fsize.width - btn.width)/2, 82+btn.height);
+        _optsBtn->setPosition((fsize.width - btn.width)/2, 82+btn.height*2);
+        _exitBtn->setPosition((fsize.width - btn.width)/2, 82+btn.height*3);
     }
 }
