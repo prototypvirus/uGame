@@ -3,6 +3,7 @@
 //
 
 #include <core/AssetsManager.h>
+#include <gui/UI.h>
 #include "gui/Window.h"
 
 namespace uGame {
@@ -15,7 +16,7 @@ namespace uGame {
         delete stream;
         setPosition(0, 0);
         _title.setString(title);
-        _title.setFont(*AssetsManager::getFont("base"));
+        _title.setFont(*UI::getFont("base"));
         _title.setCharacterSize(18);
         _title.setFillColor(sf::Color::White);
         _title.setOutlineColor(sf::Color::Black);

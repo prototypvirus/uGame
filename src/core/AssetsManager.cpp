@@ -10,6 +10,7 @@
 #include <netdb.h>
 #include <core/PackageStream.h>
 #include <core/Lang.h>
+#include <gui/UI.h>
 #include "core/AssetsManager.h"
 #include "utils/Logger.h"
 #include "Constants.h"
@@ -128,12 +129,12 @@ namespace uGame {
             AssetsManager::scan();
             AssetsManager::parse();
         }
-        AssetsManager::loadFonts();
+        UI::loadFonts();
         Lang::load();
         if (AssetsManager::_state == IDLE)
             AssetsManager::_state = COMPLETE;
 #else
-        AssetsManager::loadFonts();
+        UI::loadFonts();
         Lang::load();
         AssetsManager::_state = COMPLETE;
 #endif
@@ -305,45 +306,5 @@ namespace uGame {
         req.append("Connection: close\r\n\r\n");
         send(sock, req.c_str(), req.length(), 0);
         return sock;
-    }
-
-    void AssetsManager::loadFonts() {
-        sf::Font* font = new sf::Font();
-        font->loadFromFile(FALLBACK_FONT);
-        AssetsManager::_fonts["fallback"] = font;
-        if(!AssetsManager::hasEntry("/cfg/fonts")) {
-            L_WARN("No fonts list, only fallback available.");
-            return;
-        }
-        sf::InputStream* stream = AssetsManager::getStream("/cfg/fonts");
-        sf::Uint8 count;
-        sf::Uint8 len;
-        std::string file;
-        std::string name;
-        char buffer[256];
-        stream->read(&count, 1);
-        for(sf::Uint8 i = 0; i < count; i++) {
-            stream->read(&len, 1);
-            memset(buffer, 0, 256);
-            stream->read(buffer, len);
-            name.assign(buffer, len);
-            stream->read(&len, 1);
-            memset(buffer, 0, 256);
-            stream->read(buffer, len);
-            file.assign(buffer, len);
-            font = new sf::Font();
-            sf::InputStream* fstr = AssetsManager::getStream(file);
-            font->loadFromStream(*fstr);
-            _fonts[name] = font;
-            L_INFO("Load font "+file+" as "+name);
-        }
-        delete stream;
-    }
-
-    sf::Font *AssetsManager::getFont(const std::string &font) {
-        if(AssetsManager::_fonts.count(font) > 0)
-            return AssetsManager::_fonts[font];
-        L_WARN("Font "+font+" not available, use fallback.");
-        return AssetsManager::_fonts["fallback"];
     }
 }

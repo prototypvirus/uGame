@@ -4,6 +4,7 @@
 
 #include <SFML/System/String.hpp>
 #include <core/AssetsManager.h>
+#include <gui/UI.h>
 #include "gui/Button.h"
 #include "gui/ControlsContainer.h"
 
@@ -18,7 +19,7 @@ namespace uGame {
         delete stream;
         setPosition(0 ,0);
         _text.setString(text);
-        _text.setFont(*AssetsManager::getFont("base"));
+        _text.setFont(*UI::getFont("base"));
         _text.setCharacterSize(18);
         _text.setFillColor(sf::Color::White);
         _text.setOutlineColor(sf::Color::Black);

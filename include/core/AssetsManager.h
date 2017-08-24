@@ -53,8 +53,6 @@ namespace uGame {
 
         static sf::InputStream *getStream(const std::string &name);
 
-        static sf::Font* getFont(const std::string& font);
-
     protected:
         static State _state;
         static std::string _dir;
@@ -79,8 +77,6 @@ namespace uGame {
         static bool checkHash(sf::Uint16 id, const std::string &hash);
 
         static int connect(const std::string &url);
-
-        static void loadFonts();
     };
 }
 
