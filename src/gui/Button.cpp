@@ -32,6 +32,7 @@ namespace uGame {
         sf::FloatRect rect = _text.getLocalBounds();
         _text.setPosition((_size.x - rect.width)/2, (_size.y - rect.height)/2);
         _state = Hover; //Fix for comparing in method
+        _press = false;
         setState(Normal);
     }
 
@@ -64,17 +65,25 @@ namespace uGame {
         s++;
         _vertex[2].texCoords = sf::Vector2f(0, s*_size.y);
         _vertex[3].texCoords = sf::Vector2f(_size.x, s*_size.y);
+        _press = (state == Press);
     }
 
     bool Button::isPress() {
-        return false;
+        return _press;
     }
 
     void Button::event(const sf::Event &event) {
         if(event.type == sf::Event::MouseMoved) {
-            //L_INFO("Mouse move "+std::to_string(event.mouseMove.x)+'x'+std::to_string(event.mouseMove.y));
             sf::FloatRect rect = getGlobalBounds();
-            setState(rect.contains(event.mouseMove.x, event.mouseMove.y)?Hover:Normal);
+            setState(rect.contains(event.mouseMove.x, event.mouseMove.y) ? Hover : Normal);
+        }
+        if(event.type == sf::Event::MouseButtonPressed) {
+            sf::FloatRect rect = getGlobalBounds();
+            setState(rect.contains(event.mouseButton.x, event.mouseButton.y) ? Press : Normal);
+        }
+        if(event.type == sf::Event::MouseButtonReleased) {
+            sf::FloatRect rect = getGlobalBounds();
+            setState(rect.contains(event.mouseButton.x, event.mouseButton.y) ? Hover : Normal);
         }
     }
 

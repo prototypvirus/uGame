@@ -65,6 +65,8 @@ namespace uGame {
 
     void StateMenu::update(const float time) {
         _menuFrame->update(time);
+        if(_exitBtn->isPress())
+            _app->state()->close();
     }
 
     void StateMenu::draw(sf::RenderWindow &render, const float time) {
@@ -76,9 +78,9 @@ namespace uGame {
         sf::FloatRect fsize = _menuFrame->getLocalBounds();
         _menuFrame->setPosition((wsize.x-fsize.width)/2, (wsize.y-fsize.height)/2);
         sf::FloatRect btn = _playBtn->getLocalBounds();
-        _playBtn->setPosition((fsize.width - btn.width)/2, 52);
-        _profBtn->setPosition((fsize.width - btn.width)/2, 52+btn.height);
-        _optsBtn->setPosition((fsize.width - btn.width)/2, 52+btn.height*2);
-        _exitBtn->setPosition((fsize.width - btn.width)/2, 52+btn.height*3);
+        _playBtn->setPosition((fsize.width - btn.width)/2, 72);
+        _profBtn->setPosition((fsize.width - btn.width)/2, 72+btn.height);
+        _optsBtn->setPosition((fsize.width - btn.width)/2, 72+btn.height*2);
+        _exitBtn->setPosition((fsize.width - btn.width)/2, 72+btn.height*3);
     }
 }

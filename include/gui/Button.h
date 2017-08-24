@@ -43,6 +43,7 @@ namespace uGame {
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
         void setState(State state);
         bool _visible;
+        bool _press;
         State _state;
         sf::Vector2f _size;
         sf::Texture _texture;
