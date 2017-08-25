@@ -64,6 +64,9 @@ namespace uGame {
             delete[] it.second->rects;
             delete[] it.second->points;
         }
+        for(auto& i : UI::_fonts)
+            delete i.second;
+        UI::_fonts.clear();
         UI::_layouts.clear();
     }
 
@@ -93,6 +96,7 @@ namespace uGame {
             stream->read(&rect.top, 4);
             stream->read(&rect.width, 4);
             stream->read(&rect.height, 4);
+            lay->rects[i] = rect;
         }
         stream->read(&count, 4);
         lay->points = new sf::Vector2u[count];
@@ -100,6 +104,24 @@ namespace uGame {
             sf::Vector2u dot;
             stream->read(&dot.x, 4);
             stream->read(&dot.y, 4);
+            lay->points[i] = dot;
+        }
+        stream->read(&count, 4);
+        lay->colors = new sf::Color[count];
+        for (int i = 0; i < count; ++i) {
+            sf::Color color;
+            stream->read(&color.r, 1);
+            stream->read(&color.g, 1);
+            stream->read(&color.b, 1);
+            stream->read(&color.a, 1);
+            lay->colors[i] = color;
+        }
+        stream->read(&count, 4);
+        lay->floats = new float[count];
+        for (int i = 0; i < count; ++i) {
+            float val;
+            stream->read(&val, 4);
+            lay->floats[i] = val;
         }
         UI::_layouts[f] = lay;
         delete stream;

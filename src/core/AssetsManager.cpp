@@ -20,7 +20,6 @@ namespace uGame {
     std::string AssetsManager::_dir;
     std::vector<std::string> AssetsManager::_packages;
     std::unordered_map<std::string, AssetsManager::Entry> AssetsManager::_entries;
-    std::unordered_map<std::string, sf::Font*> AssetsManager::_fonts;
     std::vector<AssetsManager::Download> AssetsManager::_downloads;
     AssetsManager::State AssetsManager::_state = AssetsManager::EMPTY;
     float AssetsManager::_progress = 0;
@@ -71,7 +70,6 @@ namespace uGame {
 
     void AssetsManager::clean() {
         AssetsManager::_entries.clear();
-        AssetsManager::_fonts.clear();
         UI::clean();
     }
 

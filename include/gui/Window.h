@@ -11,6 +11,7 @@
 #include <SFML/Graphics/VertexArray.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Text.hpp>
+#include "UI.h"
 
 namespace uGame {
 
@@ -27,6 +28,8 @@ namespace uGame {
 
         sf::FloatRect getGlobalBounds() const;
 
+        bool isClose();
+
     protected:
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
@@ -35,6 +38,8 @@ namespace uGame {
         sf::VertexArray _vertex;
         sf::Text _title;
         sf::Vector2f _size;
+        Layout* _layout;
+        bool _close;
     };
 }
 

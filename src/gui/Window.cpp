@@ -11,31 +11,35 @@ namespace uGame {
         _texture(),
         _vertex(sf::TrianglesStrip, 4),
         _title() {
-        sf::InputStream* stream = AssetsManager::getStream("/imgs/ui/frame.png");
+        _layout = UI::getLayout("/layouts/window.gui");
+        sf::InputStream* stream = AssetsManager::getStream(_layout->images[0]);
         _texture.loadFromStream(*stream);
         delete stream;
+
         setPosition(0, 0);
         _title.setString(title);
         _title.setFont(*UI::getFont("base"));
-        _title.setCharacterSize(18);
-        _title.setFillColor(sf::Color::White);
-        _title.setOutlineColor(sf::Color::Black);
-        _title.setOutlineThickness(1.0f);
-        sf::Vector2u size = _texture.getSize();
-        _size = sf::Vector2f(size.x, size.y);
+        _title.setCharacterSize(static_cast<unsigned int>(_layout->floats[0]));
+        _title.setFillColor(_layout->colors[0]);
+        _title.setOutlineColor(_layout->colors[1]);
+        _title.setOutlineThickness(_layout->floats[1]);
+        _size = sf::Vector2f(_layout->points[0].x, _layout->points[0].y);
 
-        _vertex[0].texCoords = sf::Vector2f(0, 0);
-        _vertex[1].texCoords = sf::Vector2f(size.x, 0);
-        _vertex[2].texCoords = sf::Vector2f(0, size.y);
-        _vertex[3].texCoords = sf::Vector2f(size.x, size.y);
+        sf::IntRect rect = _layout->rects[0];
+
+        _vertex[0].texCoords = sf::Vector2f(rect.left, rect.top);
+        _vertex[1].texCoords = sf::Vector2f(rect.left+rect.width, rect.top);
+        _vertex[2].texCoords = sf::Vector2f(rect.left, rect.top+rect.height);
+        _vertex[3].texCoords = sf::Vector2f(rect.left+rect.width, rect.top+rect.height);
 
         _vertex[0].position = sf::Vector2f(0, 0);
-        _vertex[1].position = sf::Vector2f(size.x, 0);
-        _vertex[2].position = sf::Vector2f(0, size.y);
-        _vertex[3].position = sf::Vector2f(size.x, size.y);
+        _vertex[1].position = sf::Vector2f(_size.x, 0);
+        _vertex[2].position = sf::Vector2f(0, _size.y);
+        _vertex[3].position = sf::Vector2f(_size.x, _size.y);
 
-        sf::FloatRect rect = _title.getLocalBounds();
-        _title.setPosition((size.x - rect.width)/2, 8);
+        sf::FloatRect trect = _title.getLocalBounds();
+        _title.setPosition(_layout->points[1].x - (trect.width/2), _layout->points[1].y);
+        _close = false;
     }
 
     Window::~Window() {
@@ -60,6 +64,13 @@ namespace uGame {
     }
 
     void Window::event(const sf::Event &event) {
+        if(event.type == sf::Event::MouseButtonPressed) {
+            sf::IntRect rect = _layout->rects[1];
+            _close = getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.mouseButton.x, event.mouseButton.y);
+        }
+        if(event.type == sf::Event::MouseButtonReleased) {
+            _close = false;
+        }
         for(auto& item : _controls)
             item->event(event);
     }
@@ -67,5 +78,9 @@ namespace uGame {
     void Window::update(const float time) {
         for(auto& item : _controls)
             item->update(time);
+    }
+
+    bool Window::isClose() {
+        return _close;
     }
 }

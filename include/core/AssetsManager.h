@@ -59,7 +59,6 @@ namespace uGame {
         static std::vector<std::string> _packages;
         static std::vector<Download> _downloads;
         static std::unordered_map<std::string, Entry> _entries;
-        static std::unordered_map<std::string, sf::Font*> _fonts;
         static float _progress;
 
         static void scan();

@@ -14,6 +14,8 @@ namespace uGame {
         std::string* images;
         sf::IntRect* rects;
         sf::Vector2u* points;
+        sf::Color* colors;
+        float* floats;
     };
 
     class UI {
