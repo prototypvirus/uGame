@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
 
 LOCAL_MODULE    := ugame
 
-LOCAL_CFLAGS    := -std=c++11
+LOCAL_CFLAGS    := -std=c++11 -D_OS_ANDROID
 
 LOCAL_C_INCLUDES := include
 
