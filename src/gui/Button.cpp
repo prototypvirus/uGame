@@ -44,14 +44,6 @@ namespace uGame {
 
     }
 
-    void Button::setVisible(bool v) {
-        _visible = v;
-    }
-
-    bool Button::isVisible() {
-        return _visible;
-    }
-
     void Button::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         states.transform *= getTransform();
         states.texture = &_texture;

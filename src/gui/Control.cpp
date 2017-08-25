@@ -9,4 +9,12 @@ namespace uGame {
     Control::Control(ControlsContainer *parent) {
         _parent = parent;
     }
+
+    void Control::setVisible(bool v) {
+        _visible = v;
+    }
+
+    bool Control::isVisible() {
+        return _visible;
+    }
 }

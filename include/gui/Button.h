@@ -20,10 +20,6 @@ namespace uGame {
 
         virtual ~Button();
 
-        void setVisible(bool v) override;
-
-        bool isVisible() override;
-
         bool isPress();
 
         void event(const sf::Event &event) override;

@@ -17,13 +17,14 @@ namespace uGame {
     class Control : public sf::Drawable, public sf::Transformable {
     public:
         Control(ControlsContainer* parent = 0);
-        virtual void setVisible(bool v) = 0;
-        virtual bool isVisible() = 0;
+        virtual void setVisible(bool v);
+        virtual bool isVisible();
         virtual void event(const sf::Event& event) = 0;
         virtual void update(const float time) = 0;
 
     protected:
         ControlsContainer* _parent;
+        bool _visible;
         friend ControlsContainer;
     };
 }
