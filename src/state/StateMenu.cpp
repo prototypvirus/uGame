@@ -21,6 +21,7 @@ namespace uGame {
         delete _profBtn;
         delete _optsBtn;
         delete _exitBtn;
+        delete _profile;
     }
 
 
@@ -46,6 +47,8 @@ namespace uGame {
         _menuFrame->addControl(_profBtn);
         _menuFrame->addControl(_optsBtn);
         _menuFrame->addControl(_exitBtn);
+        _profile = new Label("user@local", static_cast<unsigned int>(_menuFrame->getLocalBounds().width));
+        _menuFrame->addControl(_profile);
         centerContent(app->window()->getSize());
     }
 
@@ -79,6 +82,7 @@ namespace uGame {
         sf::FloatRect fsize = _menuFrame->getLocalBounds();
         _menuFrame->setPosition((wsize.x-fsize.width)/2, (wsize.y-fsize.height)/2);
         sf::FloatRect btn = _playBtn->getLocalBounds();
+        _profile->setPosition(0, 62);
         _playBtn->setPosition((fsize.width - btn.width)/2, 92);
         _profBtn->setPosition((fsize.width - btn.width)/2, 92+btn.height);
         _optsBtn->setPosition((fsize.width - btn.width)/2, 92+btn.height*2);

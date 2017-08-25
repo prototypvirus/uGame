@@ -10,6 +10,7 @@
 #include <core/GameState.h>
 #include <gui/Window.h>
 #include <gui/Button.h>
+#include <gui/Label.h>
 
 namespace uGame {
 
@@ -38,6 +39,7 @@ namespace uGame {
         Button* _profBtn;
         Button* _optsBtn;
         Button* _exitBtn;
+        Label* _profile;
         void centerContent(sf::Vector2u wsize);
     };
 }
