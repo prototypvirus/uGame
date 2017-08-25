@@ -40,6 +40,7 @@ namespace uGame {
         sf::Vector2f _size;
         Layout* _layout;
         bool _close;
+        bool _press;
     };
 }
 

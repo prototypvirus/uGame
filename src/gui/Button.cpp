@@ -68,11 +68,14 @@ namespace uGame {
         _vertex[1].texCoords = sf::Vector2f(_layout->points[s].x + _layout->points[3].x, _layout->points[s].y);
         _vertex[2].texCoords = sf::Vector2f(_layout->points[s].x, _layout->points[s].y + _layout->points[3].y);
         _vertex[3].texCoords = sf::Vector2f(_layout->points[s].x + _layout->points[3].x, _layout->points[s].y + _layout->points[3].y);
-        _press = (state == Press);
+        //_press = (state == Press);
     }
 
     bool Button::isPress() {
-        return _press;
+        if(!_press)
+            return false;
+        _press = false;
+        return true;
     }
 
     void Button::event(const sf::Event &event) {
@@ -86,7 +89,12 @@ namespace uGame {
         }
         if(event.type == sf::Event::MouseButtonReleased) {
             sf::FloatRect rect = getGlobalBounds();
-            setState(rect.contains(event.mouseButton.x, event.mouseButton.y) ? Hover : Normal);
+            if(rect.contains(event.mouseButton.x, event.mouseButton.y)) {
+                _press = (_state == Press);
+                setState(Hover);
+            }else{
+                setState(Normal);
+            }
         }
     }
 

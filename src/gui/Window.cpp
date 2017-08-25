@@ -40,6 +40,7 @@ namespace uGame {
         sf::FloatRect trect = _title.getLocalBounds();
         _title.setPosition(_layout->points[1].x - (trect.width/2), _layout->points[1].y);
         _close = false;
+        _press = false;
     }
 
     Window::~Window() {
@@ -66,10 +67,12 @@ namespace uGame {
     void Window::event(const sf::Event &event) {
         if(event.type == sf::Event::MouseButtonPressed) {
             sf::IntRect rect = _layout->rects[1];
-            _close = getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.mouseButton.x, event.mouseButton.y);
+            _press = getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.mouseButton.x, event.mouseButton.y);
         }
         if(event.type == sf::Event::MouseButtonReleased) {
-            _close = false;
+            sf::IntRect rect = _layout->rects[1];
+            _close = (_press && getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.mouseButton.x, event.mouseButton.y));
+            _press = false;
         }
         for(auto& item : _controls)
             item->event(event);
@@ -81,6 +84,9 @@ namespace uGame {
     }
 
     bool Window::isClose() {
-        return _close;
+        if(!_close)
+            return false;
+        _close = false;
+        return true;
     }
 }
