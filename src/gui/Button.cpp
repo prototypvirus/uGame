@@ -14,24 +14,27 @@ namespace uGame {
         _texture(),
         _vertex(sf::TrianglesStrip, 4),
         _text() {
-        sf::InputStream* stream = AssetsManager::getStream("/imgs/ui/menu_button.png");
+        _layout = UI::getLayout("/layouts/menu_button.gui");
+        sf::InputStream* stream = AssetsManager::getStream(_layout->images[0]);
         _texture.loadFromStream(*stream);
         delete stream;
         setPosition(0 ,0);
         _text.setString(text);
         _text.setFont(*UI::getFont("base"));
-        _text.setCharacterSize(18);
-        _text.setFillColor(sf::Color::White);
-        _text.setOutlineColor(sf::Color::Black);
-        _text.setOutlineThickness(1.0f);
-        sf::Vector2u tsize = _texture.getSize();
-        _size = sf::Vector2f(tsize.x, tsize.y/3.0f);
+        _text.setCharacterSize(static_cast<unsigned int>(_layout->floats[0]));
+        _text.setFillColor(_layout->colors[0]);
+        _text.setOutlineColor(_layout->colors[1]);
+        _text.setOutlineThickness(_layout->floats[1]);
+        //sf::Vector2u tsize = _texture.getSize();
+
+        _size = sf::Vector2f(_layout->points[3].x, _layout->points[3].y);
         _vertex[0].position = sf::Vector2f(0, 0);
         _vertex[1].position = sf::Vector2f(_size.x, 0);
         _vertex[2].position = sf::Vector2f(0, _size.y);
         _vertex[3].position = sf::Vector2f(_size.x, _size.y);
+
         sf::FloatRect rect = _text.getLocalBounds();
-        _text.setPosition((_size.x - rect.width)/2, (_size.y - rect.height)/2);
+        _text.setPosition(_layout->points[4].x - rect.width/2, _layout->points[4].y - rect.height/2);
         _state = Hover; //Fix for comparing in method
         _press = false;
         setState(Normal);
@@ -61,11 +64,10 @@ namespace uGame {
             return;
         _state = state;
         char s = (char)state;
-        _vertex[0].texCoords = sf::Vector2f(0, s*_size.y);
-        _vertex[1].texCoords = sf::Vector2f(_size.x, s*_size.y);
-        s++;
-        _vertex[2].texCoords = sf::Vector2f(0, s*_size.y);
-        _vertex[3].texCoords = sf::Vector2f(_size.x, s*_size.y);
+        _vertex[0].texCoords = sf::Vector2f(_layout->points[s].x, _layout->points[s].y);
+        _vertex[1].texCoords = sf::Vector2f(_layout->points[s].x + _layout->points[3].x, _layout->points[s].y);
+        _vertex[2].texCoords = sf::Vector2f(_layout->points[s].x, _layout->points[s].y + _layout->points[3].y);
+        _vertex[3].texCoords = sf::Vector2f(_layout->points[s].x + _layout->points[3].x, _layout->points[s].y + _layout->points[3].y);
         _press = (state == Press);
     }
 

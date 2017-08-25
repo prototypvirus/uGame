@@ -49,6 +49,7 @@ namespace uGame {
         sf::Texture _texture;
         sf::VertexArray _vertex;
         sf::Text _text;
+        Layout* _layout;
     };
 }
 
