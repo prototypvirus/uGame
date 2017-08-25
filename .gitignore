@@ -7,3 +7,7 @@ vgcore.*
 *.otf
 *.ttf
 sdk/*
+jni/include
+jni/src
+libs/
+obj/
