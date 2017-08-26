@@ -12,3 +12,4 @@ jni/src
 libs/
 obj/
 resources/*
+compile.sh

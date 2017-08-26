@@ -14,7 +14,7 @@
 #define WIN_MIN_HEIGHT  240
 #define FIX_FPS         30
 #define PACK_MAX        256
-#define GAME_SITE_HOST  "localhost"
+#define GAME_SITE_HOST  "192.168.0.100"
 #define GAME_SITE_PORT  80
 #define GAME_SITE_UPD   "/game/resources.php"
 #define GAME_SITE_RES   "/game/res/res_"

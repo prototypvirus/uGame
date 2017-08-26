@@ -4,6 +4,7 @@
 
 #include <utils/Utils.h>
 #include <cstring>
+#include <unistd.h>
 #include <SFML/Network/Http.hpp>
 #include <SFML/System/FileInputStream.hpp>
 #include <sstream>
@@ -200,6 +201,7 @@ namespace uGame {
                 }
                 AssetsManager::_progress = current + last;
             }
+            close(sock);
             file.flush();
             file.close();
         }
@@ -211,11 +213,16 @@ namespace uGame {
         AssetsManager::_state = CHECK_INFO;
         sf::Http http(GAME_SITE_HOST, GAME_SITE_PORT);
         sf::Http::Request req(GAME_SITE_UPD);
+        std::string cnt("Connect to ");
+        cnt.append(GAME_SITE_HOST);
+        cnt.append(':' + std::to_string(GAME_SITE_PORT) + '/');
+        cnt.append(GAME_SITE_UPD);
+        L_INFO(cnt);
         req.setField("Game-Version", version);
         sf::Http::Response resp = http.sendRequest(req, sf::seconds(30.0f));
         if (resp.getStatus() != sf::Http::Response::Ok) {
             AssetsManager::_state = resp.getStatus() < 1000 ? BAD_RESP : NO_INET;
-            L_ERR("No connection or bad response!");
+            L_ERR("No connection or bad response! ("+std::to_string(resp.getStatus())+')');
             return;
         }
         std::string body = resp.getBody();
@@ -263,6 +270,10 @@ namespace uGame {
         stream->open(file);
         return stream;
 #else
+        if(!hasEntry(name)) {
+            L_ERR("Not have "+name+" in resources!");
+            return NULL;
+        }
         struct Entry entry = AssetsManager::_entries[name];
         return new PackageStream(entry.package, entry.offset, entry.size);
 #endif
