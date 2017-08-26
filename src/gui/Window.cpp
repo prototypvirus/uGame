@@ -69,9 +69,18 @@ namespace uGame {
             sf::IntRect rect = _layout->rects[1];
             _press = getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.mouseButton.x, event.mouseButton.y);
         }
+        if(event.type == sf::Event::TouchBegan && event.touch.finger == 0) {
+            sf::IntRect rect = _layout->rects[1];
+            _press = getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.touch.x, event.touch.y);
+        }
         if(event.type == sf::Event::MouseButtonReleased) {
             sf::IntRect rect = _layout->rects[1];
             _close = (_press && getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.mouseButton.x, event.mouseButton.y));
+            _press = false;
+        }
+        if(event.type == sf::Event::TouchEnded && event.touch.finger == 0) {
+            sf::IntRect rect = _layout->rects[1];
+            _close = (_press && getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.touch.x, event.touch.y));
             _press = false;
         }
         for(auto& item : _controls)
