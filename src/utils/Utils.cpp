@@ -9,6 +9,12 @@
 #include <pwd.h>
 #include <fstream>
 #include <utils/MD5.h>
+#ifdef _OS_ANDROID
+#include <jni.h>
+#include <android/native_activity.h>
+#include <SFML/System/NativeActivity.hpp>
+#include "utils/Logger.h"
+#endif
 
 namespace uGame {
 
@@ -17,7 +23,19 @@ namespace uGame {
 #ifdef _OS_IOS
 
 #elif _OS_ANDROID
-
+        ANativeActivity *activity = sf::getNativeActivity();
+        JNIEnv* env = activity->env;
+        activity->vm->AttachCurrentThread(&env, NULL);
+        jclass cls_Env = env->FindClass("android/app/NativeActivity");
+        jmethodID mid = env->GetMethodID(cls_Env, "getExternalFilesDir", "(Ljava/lang/String;)Ljava/io/File;");
+        jobject obj_File = env->CallObjectMethod(activity->clazz, mid, NULL);
+        jclass cls_File = env->FindClass("java/io/File");
+        jmethodID mid_getPath = env->GetMethodID(cls_File, "getPath", "()Ljava/lang/String;");
+        jstring obj_Path = (jstring) env->CallObjectMethod(obj_File, mid_getPath);
+        const char *cstr = env->GetStringUTFChars(obj_Path, NULL);
+        dir = std::string(cstr);
+        env->ReleaseStringUTFChars(obj_Path, cstr);
+        return dir;
 #elif _OS_WIN32
 
 #elif _OS_DARWIN
@@ -41,7 +59,7 @@ namespace uGame {
 #ifdef _OS_IOS
 
 #elif _OS_ANDROID
-
+        return mkdir(dir.c_str(), 0755) != 0;
 #elif _OS_WIN32
 
 #elif _OS_DARWIN
@@ -56,7 +74,8 @@ namespace uGame {
 #ifdef _OS_IOS
 
 #elif _OS_ANDROID
-
+        int acs = access(file.c_str(), R_OK);
+        return acs == 0;
 #elif _OS_WIN32
 
 #elif _OS_DARWIN

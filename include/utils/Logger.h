@@ -34,6 +34,8 @@ namespace uGame {
 
     protected:
         static std::ofstream *_file;
+
+        static void write(const char* msg, unsigned long len);
     };
 
 #define L_INFO Logger::info
