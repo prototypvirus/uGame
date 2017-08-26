@@ -11,3 +11,4 @@ jni/include
 jni/src
 libs/
 obj/
+resources/*
