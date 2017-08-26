@@ -69,12 +69,12 @@ namespace uGame {
             _states.back()->update(time);
     }
 
-    void StateManager::draw(sf::RenderWindow &render, const float time) {
+    void StateManager::draw(sf::RenderWindow &render) {
         /*for(auto& i : _states) {
             if(i->isPassiveDraw())
                 i->draw(render, time);
         }*/
         if (!_states.empty())
-            _states.back()->draw(render, time);
+            _states.back()->draw(render);
     }
 }

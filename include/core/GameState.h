@@ -20,7 +20,7 @@ namespace uGame {
 
         virtual void update(const float time) = 0;
 
-        virtual void draw(sf::RenderWindow &render, const float time) = 0;
+        virtual void draw(sf::RenderWindow &render) = 0;
 
     };
 }

@@ -99,7 +99,7 @@ namespace uGame {
         }
     }
 
-    void StateLoading::draw(sf::RenderWindow &render, const float time) {
+    void StateLoading::draw(sf::RenderWindow &render) {
         render.clear(sf::Color::White);
         render.draw(*_logo);
         if (_progressVisible) {

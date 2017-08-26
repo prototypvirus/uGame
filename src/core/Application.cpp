@@ -64,7 +64,7 @@ namespace uGame {
             float time = _clock.restart().asSeconds();
             _state->update(time);
             _window->clear(sf::Color::Black);
-            _state->draw(*_window, time);
+            _state->draw(*_window);
             _window->display();
         }
     }

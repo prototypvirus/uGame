@@ -26,7 +26,7 @@ namespace uGame {
 
         void event(const sf::Event &event) override;
 
-        void draw(sf::RenderWindow &render, const float time) override;
+        void draw(sf::RenderWindow &render) override;
 
     private:
         sf::Sprite *_logo;

@@ -28,7 +28,7 @@ namespace uGame {
 
         void update(const float time) override;
 
-        void draw(sf::RenderWindow &render, const float time) override;
+        void draw(sf::RenderWindow &render) override;
 
     private:
         Application *_app;

@@ -32,7 +32,7 @@ namespace uGame {
 
         void update(const float time);
 
-        void draw(sf::RenderWindow &render, const float time);
+        void draw(sf::RenderWindow &render);
 
     protected:
         Application *_app;
