@@ -264,8 +264,10 @@ namespace uGame {
     sf::InputStream *AssetsManager::getStream(const std::string &name) {
 #ifdef _DEBUG
         std::string file(AssetsManager::_dir + name);
-        if(!Utils::isFileExists(file))
+        if(!Utils::isFileExists(file)) {
+            L_ERR("Not have "+name+" in resources!");
             return NULL;
+        }
         sf::FileInputStream* stream = new sf::FileInputStream();
         stream->open(file);
         return stream;

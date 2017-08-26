@@ -75,13 +75,30 @@ namespace uGame {
             sf::FloatRect rect = getGlobalBounds();
             setState(rect.contains(event.mouseMove.x, event.mouseMove.y) ? Hover : Normal);
         }
+        if(event.type == sf::Event::TouchMoved && _state != Press && event.touch.finger == 0) {
+            sf::FloatRect rect = getGlobalBounds();
+            setState(rect.contains(event.mouseMove.x, event.mouseMove.y) ? Hover : Normal);
+        }
         if(event.type == sf::Event::MouseButtonPressed) {
             sf::FloatRect rect = getGlobalBounds();
             setState(rect.contains(event.mouseButton.x, event.mouseButton.y) ? Press : Normal);
         }
+        if(event.type == sf::Event::TouchBegan && event.touch.finger == 0) {
+            sf::FloatRect rect = getGlobalBounds();
+            setState(rect.contains(event.touch.x, event.touch.y) ? Press : Normal);
+        }
         if(event.type == sf::Event::MouseButtonReleased) {
             sf::FloatRect rect = getGlobalBounds();
             if(rect.contains(event.mouseButton.x, event.mouseButton.y)) {
+                _press = (_state == Press);
+                setState(Hover);
+            }else{
+                setState(Normal);
+            }
+        }
+        if(event.type == sf::Event::TouchEnded && event.touch.finger == 0) {
+            sf::FloatRect rect = getGlobalBounds();
+            if(rect.contains(event.touch.x, event.touch.y)) {
                 _press = (_state == Press);
                 setState(Hover);
             }else{

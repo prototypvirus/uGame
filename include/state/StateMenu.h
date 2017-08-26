@@ -6,7 +6,7 @@
 #define UGAME_STATEMENU_H
 
 #include <SFML/Graphics/Texture.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/Sprite.hpp>
 #include <core/GameState.h>
 #include <gui/Window.h>
 #include <gui/Button.h>
@@ -33,7 +33,7 @@ namespace uGame {
     private:
         Application *_app;
         sf::Texture *_bgTexture;
-        sf::RectangleShape *_bg;
+        sf::Sprite *_bg;
         Window* _menuFrame;
         Button* _playBtn;
         Button* _profBtn;
