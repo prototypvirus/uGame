@@ -10,6 +10,7 @@
 #include <SFML/Window/Event.hpp>
 #include "AssetsManager.h"
 #include "StateManager.h"
+#include "Config.h"
 
 namespace uGame {
     class Application {
@@ -26,9 +27,12 @@ namespace uGame {
 
         sf::RenderWindow *window() const;
 
+        Config *config() const;
+
     protected:
         StateManager *_state;
         sf::RenderWindow *_window;
+        Config *_cfg;
         sf::Clock _clock;
         bool _running;
 

@@ -19,13 +19,19 @@ namespace uGame {
             width = mode.width;
         if (height > mode.height)
             height = mode.height;
+#ifdef _OS_ANDROID
+        _window = new sf::RenderWindow(sf::VideoMode::getDesktopMode(), GAME_NAME, sf::Style::Fullscreen);
+#else
         _window = new sf::RenderWindow(sf::VideoMode(width, height), GAME_NAME, sf::Style::Default);
+#endif
+        _cfg = new Config(appDir + "/config.inl");
         _window->setFramerateLimit(FIX_FPS);
         _running = false;
     }
 
     Application::~Application() {
         delete _window;
+        delete _cfg;
         AssetsManager::destroy();
     }
 
@@ -79,6 +85,10 @@ namespace uGame {
 
     sf::RenderWindow *Application::window() const {
         return _window;
+    }
+
+    Config *Application::config() const {
+        return _cfg;
     }
 
 }
