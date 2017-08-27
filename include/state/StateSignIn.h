@@ -10,6 +10,9 @@
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <SFML/Graphics/Sprite.hpp>
 #include <SFML/Graphics/Texture.hpp>
+#include <gui/Window.h>
+#include <gui/Label.h>
+#include <gui/Button.h>
 
 namespace uGame {
 
@@ -33,6 +36,11 @@ namespace uGame {
         Application* _app;
         sf::Texture *_bgTexture;
         sf::Sprite *_bg;
+        Window* _menuFrame;
+        Label* _labelUser;
+        Label* _labelPass;
+        Button* _enterBtn;
+        Button* _backBtn;
         void centerContent(sf::Vector2u wsize);
     };
 }

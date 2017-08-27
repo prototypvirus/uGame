@@ -100,10 +100,8 @@ namespace uGame {
             sf::FloatRect rect = getGlobalBounds();
             if(rect.contains(event.touch.x, event.touch.y)) {
                 _press = (_state == Press);
-                setState(Hover);
-            }else{
-                setState(Normal);
             }
+            setState(Normal);
         }
     }
 
