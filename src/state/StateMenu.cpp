@@ -43,7 +43,13 @@ namespace uGame {
         _menuFrame->addControl(_profBtn);
         _menuFrame->addControl(_optsBtn);
         _menuFrame->addControl(_exitBtn);
-        _profile = new Label("user@local", static_cast<unsigned int>(_menuFrame->getLocalBounds().width));
+        sf::String prof = app->config()->get("username", "");
+        if(prof.getSize() == 0) {
+            prof = Lang::get(5);
+            _playBtn->setText(Lang::get(6));
+            _profBtn->setText(Lang::get(7));
+        }
+        _profile = new Label(prof, static_cast<unsigned int>(_menuFrame->getLocalBounds().width));
         _menuFrame->addControl(_profile);
         centerContent(app->window()->getSize());
     }

@@ -120,4 +120,10 @@ namespace uGame {
             return _parent->getTransform().transformRect(getTransform().transformRect(getLocalBounds()));
         return getTransform().transformRect(getLocalBounds());
     }
+
+    void Button::setText(const sf::String &text) {
+        _text.setString(text);
+        sf::FloatRect rect = _text.getLocalBounds();
+        _text.setPosition(_layout->points[4].x - rect.width/2, _layout->points[4].y - rect.height/2);
+    }
 }

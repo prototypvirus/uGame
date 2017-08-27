@@ -30,6 +30,8 @@ namespace uGame {
 
         sf::FloatRect getGlobalBounds() const;
 
+        void setText(const sf::String& text);
+
     protected:
         enum State {
             Normal,
