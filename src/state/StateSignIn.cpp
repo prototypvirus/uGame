@@ -18,6 +18,8 @@ namespace uGame {
         delete _labelPass;
         delete _enterBtn;
         delete _backBtn;
+        delete _userInput;
+        delete _passInput;
     }
 
     void StateSignIn::init(const Application *app) {
@@ -34,10 +36,14 @@ namespace uGame {
         _labelPass = new Label(Lang::get(9), w);
         _enterBtn = new Button(Lang::get(10));
         _backBtn = new Button(Lang::get(11));
+        _userInput = new InputBox("TMP1", w-20);
+        _passInput = new InputBox("TMP2", w-20);
         _menuFrame->addControl(_labelUser);
         _menuFrame->addControl(_labelPass);
         _menuFrame->addControl(_enterBtn);
         _menuFrame->addControl(_backBtn);
+        _menuFrame->addControl(_userInput);
+        _menuFrame->addControl(_passInput);
         centerContent(app->window()->getSize());
     }
 
@@ -82,5 +88,7 @@ namespace uGame {
         _labelPass->setPosition(0, 144);
         _enterBtn->setPosition((fsize.width - btn.width)/2, 92+btn.height*2);
         _backBtn->setPosition((fsize.width - btn.width)/2, 92+btn.height*3);
+        _userInput->setPosition(10, 120);
+        _passInput->setPosition(10, 172);
     }
 }

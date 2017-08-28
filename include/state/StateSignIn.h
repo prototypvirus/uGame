@@ -13,6 +13,7 @@
 #include <gui/Window.h>
 #include <gui/Label.h>
 #include <gui/Button.h>
+#include <gui/InputBox.h>
 
 namespace uGame {
 
@@ -41,6 +42,8 @@ namespace uGame {
         Label* _labelPass;
         Button* _enterBtn;
         Button* _backBtn;
+        InputBox* _userInput;
+        InputBox* _passInput;
         void centerContent(sf::Vector2u wsize);
     };
 }
