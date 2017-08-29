@@ -15,7 +15,8 @@ namespace uGame {
         _text(),
         _vertex(sf::TrianglesStrip, 4),
         _tick(0),
-        _width(width) {
+        _width(width),
+        _return(false) {
         _layout = UI::getLayout("/layouts/inputbox.gui");
 
         _vertex[0].position = sf::Vector2f(0, 0);
@@ -106,7 +107,7 @@ namespace uGame {
                     return true;
 
                 case sf::Keyboard::Return:
-                    //TODO: Fire action
+                    _return = true;
                     return true;
 
                 default:
@@ -231,5 +232,12 @@ namespace uGame {
             default:
                 return (chr < 127 || chr > 159);
         }
+    }
+
+    bool InputBox::isReturn() {
+        if(!_return)
+            return false;
+        _return = false;
+        return true;
     }
 }

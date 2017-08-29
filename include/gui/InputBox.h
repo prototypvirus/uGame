@@ -40,6 +40,8 @@ namespace uGame {
 
         void setCharacterRange(Range r);
 
+        bool isReturn();
+
     protected:
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
         void setCursor(int pos);
@@ -55,6 +57,7 @@ namespace uGame {
         float _tick;
         int _width;
         Range _range;
+        bool _return;
     };
 }
 
