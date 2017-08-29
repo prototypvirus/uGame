@@ -24,8 +24,8 @@ namespace uGame {
 
     }
 
-    void uGame::Label::event(const sf::Event &event) {
-
+    bool uGame::Label::event(const sf::Event &event) {
+        return false;
     }
 
     void uGame::Label::update(const float time) {

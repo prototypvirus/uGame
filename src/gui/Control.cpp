@@ -3,6 +3,7 @@
 //
 
 #include "gui/Control.h"
+#include "gui/ControlsContainer.h"
 
 namespace uGame {
 
@@ -16,5 +17,15 @@ namespace uGame {
 
     bool Control::isVisible() {
         return _visible;
+    }
+
+    void Control::focus() {
+        _focus = true;
+        if(_parent != NULL)
+            _parent->focusMe(this);
+    }
+
+    void Control::unfocus() {
+        _focus = false;
     }
 }

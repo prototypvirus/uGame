@@ -36,14 +36,15 @@ namespace uGame {
         _labelPass = new Label(Lang::get(9), w);
         _enterBtn = new Button(Lang::get(10));
         _backBtn = new Button(Lang::get(11));
-        _userInput = new InputBox("TMP1", w-20);
-        _passInput = new InputBox("TMP2", w-20);
+        _userInput = new InputBox(w - 20);
+        _passInput = new InputBox(w - 20);
         _menuFrame->addControl(_labelUser);
         _menuFrame->addControl(_labelPass);
         _menuFrame->addControl(_enterBtn);
         _menuFrame->addControl(_backBtn);
         _menuFrame->addControl(_userInput);
         _menuFrame->addControl(_passInput);
+        _userInput->focus();
         centerContent(app->window()->getSize());
     }
 
@@ -61,6 +62,7 @@ namespace uGame {
     }
 
     void StateSignIn::update(const float time) {
+        _menuFrame->update(time);
         if(_menuFrame->isClose())
             _app->state()->close();
     }

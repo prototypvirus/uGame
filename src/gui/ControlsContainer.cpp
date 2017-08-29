@@ -17,4 +17,11 @@ namespace uGame {
         _controls.erase(control);
         control->_parent = 0;
     }
+
+    void ControlsContainer::focusMe(Control *control) {
+        for(auto& i : _controls) {
+            if(i != control)
+                i->unfocus();
+        }
+    }
 }

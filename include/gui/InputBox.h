@@ -15,11 +15,18 @@
 namespace uGame {
     class InputBox : public Control {
     public:
-        InputBox(const sf::String& str, int width);
+        enum Range {
+            Normal,
+            Numeric,
+            Latin,
+            LatinNoNumeric
+        };
+
+        InputBox(int width);
 
         virtual ~InputBox();
 
-        void event(const sf::Event &event) override;
+        bool event(const sf::Event &event) override;
 
         void update(const float time) override;
 
@@ -31,10 +38,13 @@ namespace uGame {
 
         sf::FloatRect getGlobalBounds() const;
 
+        void setCharacterRange(Range r);
+
     protected:
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
         void setCursor(int pos);
         int getCursor();
+        bool checkRange(sf::Uint32 chr);
 
         Layout* _layout;
         sf::Text _text;
@@ -44,6 +54,7 @@ namespace uGame {
         int _maxLength;
         float _tick;
         int _width;
+        Range _range;
     };
 }
 

@@ -70,7 +70,7 @@ namespace uGame {
         return true;
     }
 
-    void Button::event(const sf::Event &event) {
+    bool Button::event(const sf::Event &event) {
         if(event.type == sf::Event::MouseMoved && _state != Press) {
             sf::FloatRect rect = getGlobalBounds();
             setState(rect.contains(event.mouseMove.x, event.mouseMove.y) ? Hover : Normal);
@@ -82,16 +82,19 @@ namespace uGame {
         if(event.type == sf::Event::MouseButtonPressed) {
             sf::FloatRect rect = getGlobalBounds();
             setState(rect.contains(event.mouseButton.x, event.mouseButton.y) ? Press : Normal);
+            return true;
         }
         if(event.type == sf::Event::TouchBegan && event.touch.finger == 0) {
             sf::FloatRect rect = getGlobalBounds();
             setState(rect.contains(event.touch.x, event.touch.y) ? Press : Normal);
+            return true;
         }
         if(event.type == sf::Event::MouseButtonReleased) {
             sf::FloatRect rect = getGlobalBounds();
             if(rect.contains(event.mouseButton.x, event.mouseButton.y)) {
                 _press = (_state == Press);
                 setState(Hover);
+                return true;
             }else{
                 setState(Normal);
             }
@@ -100,9 +103,11 @@ namespace uGame {
             sf::FloatRect rect = getGlobalBounds();
             if(rect.contains(event.touch.x, event.touch.y)) {
                 _press = (_state == Press);
+                return true;
             }
             setState(Normal);
         }
+        return false;
     }
 
     void Button::update(const float time) {

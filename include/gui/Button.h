@@ -22,7 +22,7 @@ namespace uGame {
 
         bool isPress();
 
-        void event(const sf::Event &event) override;
+        bool event(const sf::Event &event) override;
 
         void update(const float time) override;
 

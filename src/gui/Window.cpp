@@ -64,27 +64,33 @@ namespace uGame {
         return getTransform().transformRect(getLocalBounds());
     }
 
-    void Window::event(const sf::Event &event) {
+    bool Window::event(const sf::Event &event) {
+        for(auto& item : _controls)
+            if(item->event(event))
+                return true;
         if(event.type == sf::Event::MouseButtonPressed) {
             sf::IntRect rect = _layout->rects[1];
             _press = getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.mouseButton.x, event.mouseButton.y);
+            return true;
         }
         if(event.type == sf::Event::TouchBegan && event.touch.finger == 0) {
             sf::IntRect rect = _layout->rects[1];
             _press = getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.touch.x, event.touch.y);
+            return true;
         }
         if(event.type == sf::Event::MouseButtonReleased) {
             sf::IntRect rect = _layout->rects[1];
             _close = (_press && getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.mouseButton.x, event.mouseButton.y));
             _press = false;
+            return true;
         }
         if(event.type == sf::Event::TouchEnded && event.touch.finger == 0) {
             sf::IntRect rect = _layout->rects[1];
             _close = (_press && getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.touch.x, event.touch.y));
             _press = false;
+            return true;
         }
-        for(auto& item : _controls)
-            item->event(event);
+        return false;
     }
 
     void Window::update(const float time) {

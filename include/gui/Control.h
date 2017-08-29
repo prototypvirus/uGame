@@ -19,12 +19,15 @@ namespace uGame {
         Control(ControlsContainer* parent = 0);
         virtual void setVisible(bool v);
         virtual bool isVisible();
-        virtual void event(const sf::Event& event) = 0;
+        virtual bool event(const sf::Event &event) = 0;
         virtual void update(const float time) = 0;
+        virtual void focus();
 
     protected:
         ControlsContainer* _parent;
         bool _visible;
+        bool _focus;
+        virtual void unfocus();
         friend ControlsContainer;
     };
 }

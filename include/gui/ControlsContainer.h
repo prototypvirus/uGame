@@ -14,11 +14,13 @@ namespace uGame {
     public:
         virtual void addControl(Control* control);
         virtual void removeControl(Control* control);
-        virtual void event(const sf::Event& event) = 0;
+        virtual bool event(const sf::Event &event) = 0;
         virtual void update(const float time) = 0;
 
     protected:
         std::set<Control*> _controls;
+        virtual void focusMe(Control* control);
+        friend Control;
     };
 }
 

@@ -5,10 +5,11 @@
 #include <utils/Logger.h>
 #include "gui/InputBox.h"
 #include "gui/ControlsContainer.h"
+#include <SFML/OpenGL.hpp>
 
 namespace uGame {
 
-    InputBox::InputBox(const sf::String &str, int width) :
+    InputBox::InputBox(int width) :
         _cursorPos(0),
         _maxLength(-1),
         _text(),
@@ -33,7 +34,6 @@ namespace uGame {
         _text.setOutlineColor(_layout->colors[3]);
         _text.setOutlineThickness(_layout->floats[1]);
         _text.setCharacterSize(static_cast<unsigned int>(_layout->floats[2]));
-        _text.setString(str);
 
         _cursor.setFillColor(_layout->colors[4]);
         _cursor.setSize(sf::Vector2f(_layout->floats[3], _layout->floats[0]));
@@ -44,14 +44,99 @@ namespace uGame {
 
     }
 
-    void InputBox::event(const sf::Event &event) {
+    bool InputBox::event(const sf::Event &event) {
+        if(event.type == sf::Event::MouseButtonPressed) {
+            sf::FloatRect rect = getGlobalBounds();
+            if(rect.contains(event.mouseButton.x, event.mouseButton.y)) {
+                focus();
+                int x = event.mouseButton.x - rect.left;
+                for (int i = _text.getString().getSize(); i >= 0; --i)
+                {
+                    // Place cursor after the character under the mouse
+                    sf::Vector2f glyph_pos = _text.findCharacterPos(i);
+                    if (glyph_pos.x <= x)
+                    {
+                        setCursor(i);
+                        break;
+                    }
+                }
+                return true;
+            }
+        }
+        if(!_focus)
+            return false;
+        if(event.type == sf::Event::KeyPressed) {
+            switch (event.key.code) {
+                case sf::Keyboard::Left:
+                    setCursor(_cursorPos - 1);
+                    return true;
 
+                case sf::Keyboard::Right:
+                    setCursor(_cursorPos + 1);
+                    return true;
+
+                case sf::Keyboard::BackSpace:
+                    // Erase character before cursor
+                    if (_cursorPos > 0) {
+                        sf::String string = _text.getString();
+                        string.erase(_cursorPos - 1);
+                        _text.setString(string);
+
+                        setCursor(_cursorPos - 1);
+                    }
+                    return true;
+
+                case sf::Keyboard::Delete:
+                    // Erase character after cursor
+                    if (_cursorPos < _text.getString().getSize()) {
+                        sf::String string = _text.getString();
+                        string.erase(_cursorPos);
+                        _text.setString(string);
+
+                        setCursor(_cursorPos);
+                    }
+                    return true;
+
+                case sf::Keyboard::Home:
+                    setCursor(0);
+                    return true;
+
+                case sf::Keyboard::End:
+                    setCursor(_text.getString().getSize());
+                    return true;
+
+                case sf::Keyboard::Return:
+                    //TODO: Fire action
+                    return true;
+
+                default:
+                    break;
+            }
+            return false;
+        }
+
+        if(event.type == sf::Event::TextEntered) {
+            if (event.text.unicode > 30 && checkRange(event.text.unicode))
+            {
+                sf::String string = _text.getString();
+                if (_maxLength == -1 || (int) string.getSize() < _maxLength)
+                {
+                    // Insert character in string at cursor position
+                    string.insert(_cursorPos, event.text.unicode);
+                    _text.setString(string);
+
+                    setCursor(_cursorPos + 1);
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     void InputBox::update(const float time) {
         _tick += time;
-        if(_tick >= _layout->floats[2]) {
-            _tick -= _layout->floats[2];
+        if(_tick >= _layout->floats[4]) {
+            _tick -= _layout->floats[4];
             sf::Color clr = _cursor.getFillColor();
             clr.a = static_cast<sf::Uint8>((clr.a > 0) ? 0 : 255);
             _cursor.setFillColor(clr);
@@ -62,8 +147,13 @@ namespace uGame {
         states.transform *= getTransform();
         states.texture = NULL;
         target.draw(_vertex, states);
+        glEnable(GL_SCISSOR_TEST);
+        sf::FloatRect rect = getGlobalBounds();
+        glScissor(rect.left + _layout->points[0].x, rect.top + _layout->points[0].y, rect.left + rect.width - _layout->points[0].x, rect.top +  rect.height - _layout->points[0].y);
         target.draw(_text, states);
-        target.draw(_cursor, states);
+        glDisable(GL_SCISSOR_TEST);
+        if(_focus)
+            target.draw(_cursor, states);
     }
 
     void InputBox::setText(const sf::String &str) {
@@ -123,5 +213,23 @@ namespace uGame {
         if(_parent != 0)
             return _parent->getTransform().transformRect(getTransform().transformRect(getLocalBounds()));
         return getTransform().transformRect(getLocalBounds());
+    }
+
+    void InputBox::setCharacterRange(InputBox::Range r) {
+        _range = r;
+    }
+
+    bool InputBox::checkRange(sf::Uint32 chr) {
+        switch (_range) {
+            case Numeric:
+                return (chr > 47 && chr < 58);
+            case Latin:
+                return (chr > 47 && chr < 58) || (chr > 96 && chr < 123);
+            case LatinNoNumeric:
+                return (chr > 96 && chr < 123);
+            case Normal:
+            default:
+                return (chr < 127 || chr > 159);
+        }
     }
 }
