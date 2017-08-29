@@ -49,16 +49,16 @@ namespace uGame {
     }
 
     void StateSignIn::event(const sf::Event &event) {
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape)
-                _app->state()->close();
-        }
         if (event.type == sf::Event::Resized) {
             sf::Vector2u wsize(event.size.width, event.size.height);
             centerContent(wsize);
         }
-        if(_menuFrame != NULL)
-            _menuFrame->event(event);
+        if(_menuFrame != NULL &&_menuFrame->event(event))
+                return;
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape)
+                _app->state()->close();
+        }
     }
 
     void StateSignIn::update(const float time) {
