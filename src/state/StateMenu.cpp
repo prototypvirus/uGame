@@ -30,7 +30,8 @@ namespace uGame {
         _app = const_cast<Application *>(app);
         _bgTexture = new sf::Texture();
         sf::InputStream *stream = AssetsManager::getStream("/imgs/ui/main_bg.jpg");
-        _bgTexture->loadFromStream(*stream);
+        if(!_bgTexture->loadFromStream(*stream))
+            L_WARN("Texture not load!");
         _bg = new sf::Sprite();
         _bg->setTexture(*_bgTexture);
         delete stream;
@@ -55,16 +56,17 @@ namespace uGame {
     }
 
     void StateMenu::event(const sf::Event &event) {
-        if (event.type == sf::Event::KeyPressed) {
-            if (event.key.code == sf::Keyboard::Escape)
-                _app->state()->close();
-        }
         if (event.type == sf::Event::Resized) {
             sf::Vector2u wsize(event.size.width, event.size.height);
             centerContent(wsize);
         }
-        if(_menuFrame != NULL)
-            _menuFrame->event(event);
+        if(_menuFrame != NULL && _menuFrame->event(event))
+            return;
+
+        if (event.type == sf::Event::KeyPressed) {
+            if (event.key.code == sf::Keyboard::Escape)
+                _app->state()->close();
+        }
     }
 
     void StateMenu::update(const float time) {

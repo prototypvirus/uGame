@@ -4,6 +4,7 @@
 
 #include <core/AssetsManager.h>
 #include <gui/UI.h>
+#include <utils/Logger.h>
 #include "gui/Window.h"
 
 namespace uGame {
@@ -66,8 +67,9 @@ namespace uGame {
 
     bool Window::event(const sf::Event &event) {
         for(auto& item : _controls)
-            if(item->event(event))
+            if(item->event(event)) {
                 return true;
+            }
         if(event.type == sf::Event::MouseButtonPressed) {
             sf::IntRect rect = _layout->rects[1];
             _press = getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.mouseButton.x, event.mouseButton.y);
@@ -76,7 +78,6 @@ namespace uGame {
         if(event.type == sf::Event::TouchBegan && event.touch.finger == 0) {
             sf::IntRect rect = _layout->rects[1];
             _press = getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.touch.x, event.touch.y);
-            return true;
         }
         if(event.type == sf::Event::MouseButtonReleased) {
             sf::IntRect rect = _layout->rects[1];
@@ -88,7 +89,6 @@ namespace uGame {
             sf::IntRect rect = _layout->rects[1];
             _close = (_press && getTransform().transformRect(sf::FloatRect(rect.left, rect.top, rect.width, rect.height)).contains(event.touch.x, event.touch.y));
             _press = false;
-            return true;
         }
         return false;
     }

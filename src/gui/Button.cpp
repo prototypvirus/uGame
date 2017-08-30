@@ -81,13 +81,18 @@ namespace uGame {
         }
         if(event.type == sf::Event::MouseButtonPressed) {
             sf::FloatRect rect = getGlobalBounds();
-            setState(rect.contains(event.mouseButton.x, event.mouseButton.y) ? Press : Normal);
-            return true;
+            if(rect.contains(event.mouseButton.x, event.mouseButton.y)) {
+                setState(Press);
+                return true;
+            }else
+                setState(Normal);
         }
         if(event.type == sf::Event::TouchBegan && event.touch.finger == 0) {
             sf::FloatRect rect = getGlobalBounds();
-            setState(rect.contains(event.touch.x, event.touch.y) ? Press : Normal);
-            return true;
+            if(rect.contains(event.touch.x, event.touch.y)) {
+                setState(Press);
+            }else
+                setState(Normal);
         }
         if(event.type == sf::Event::MouseButtonReleased) {
             sf::FloatRect rect = getGlobalBounds();
@@ -103,7 +108,6 @@ namespace uGame {
             sf::FloatRect rect = getGlobalBounds();
             if(rect.contains(event.touch.x, event.touch.y)) {
                 _press = (_state == Press);
-                return true;
             }
             setState(Normal);
         }

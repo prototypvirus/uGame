@@ -3,6 +3,7 @@
 //
 
 #include <core/Lang.h>
+#include <utils/Logger.h>
 #include "state/StateSignIn.h"
 #include "core/Application.h"
 
@@ -26,7 +27,8 @@ namespace uGame {
         _app = const_cast<Application *>(app);
         _bgTexture = new sf::Texture();
         sf::InputStream *stream = AssetsManager::getStream("/imgs/ui/main_bg.jpg");
-        _bgTexture->loadFromStream(*stream);
+        if(!_bgTexture->loadFromStream(*stream))
+            L_WARN("Texture not load!");
         _bg = new sf::Sprite();
         _bg->setTexture(*_bgTexture);
         delete stream;
@@ -63,7 +65,7 @@ namespace uGame {
 
     void StateSignIn::update(const float time) {
         _menuFrame->update(time);
-        if(_menuFrame->isClose())
+        if(_menuFrame->isClose() || _backBtn->isPress())
             _app->state()->close();
     }
 

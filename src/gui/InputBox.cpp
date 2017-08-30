@@ -6,6 +6,7 @@
 #include "gui/InputBox.h"
 #include "gui/ControlsContainer.h"
 #include <SFML/OpenGL.hpp>
+#include <utils/Utils.h>
 
 namespace uGame {
 
@@ -61,13 +62,39 @@ namespace uGame {
                         break;
                     }
                 }
+#ifdef _OS_ANDROID
+                sf::Keyboard::setVirtualKeyboardVisible(true);
+                //Utils::showKeyboard(true);
+#endif
                 return true;
+            }
+        }
+        if(event.type == sf::Event::TouchBegan && event.touch.finger == 0) {
+            sf::FloatRect rect = getGlobalBounds();
+            if(rect.contains(event.touch.x, event.touch.y)) {
+                focus();
+                int x = event.touch.x - rect.left;
+                for (int i = _text.getString().getSize(); i >= 0; --i)
+                {
+                    // Place cursor after the character under the mouse
+                    sf::Vector2f glyph_pos = _text.findCharacterPos(i);
+                    if (glyph_pos.x <= x)
+                    {
+                        setCursor(i);
+                        break;
+                    }
+                }
+#ifdef _OS_ANDROID
+                sf::Keyboard::setVirtualKeyboardVisible(true);
+                //Utils::showKeyboard(true);
+#endif
             }
         }
         if(!_focus)
             return false;
         if(event.type == sf::Event::KeyPressed) {
-            switch (event.key.code) {
+            //L_INFO("KeyPress "+std::to_string(event.key.code)+'/'+std::to_string(sf::Keyboard::KeyCount));
+            switch ((int)event.key.code) {
                 case sf::Keyboard::Left:
                     setCursor(_cursorPos - 1);
                     return true;
@@ -76,7 +103,7 @@ namespace uGame {
                     setCursor(_cursorPos + 1);
                     return true;
 
-                case sf::Keyboard::BackSpace:
+                case sf::Keyboard::BackSpace: //Android incorrect (backspace = normal delete(66) | delete = 112)
                     // Erase character before cursor
                     if (_cursorPos > 0) {
                         sf::String string = _text.getString();
@@ -117,6 +144,7 @@ namespace uGame {
         }
 
         if(event.type == sf::Event::TextEntered) {
+            //L_INFO("TextEnter "+std::to_string(event.text.unicode));
             if (event.text.unicode > 30 && checkRange(event.text.unicode))
             {
                 sf::String string = _text.getString();
@@ -146,8 +174,10 @@ namespace uGame {
 
     void InputBox::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         states.transform *= getTransform();
+        const sf::Texture* t = states.texture; //fire bug (parent texture losing)
         states.texture = NULL;
         target.draw(_vertex, states);
+        states.texture = t;
         glEnable(GL_SCISSOR_TEST);
         sf::FloatRect rect = getGlobalBounds();
         glScissor(rect.left + _layout->points[0].x, rect.top + _layout->points[0].y, rect.left + rect.width - _layout->points[0].x, rect.top +  rect.height - _layout->points[0].y);
