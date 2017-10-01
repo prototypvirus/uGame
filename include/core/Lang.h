@@ -12,12 +12,28 @@
 #include <vector>
 
 namespace uGame {
+    /**
+     * Translater class
+     */
     class Lang {
     public:
+        /**
+         * Load language from file
+         */
         static void load();
+
+        /**
+         * Get translation by id
+         * @param id - translation id
+         * @return translated string
+         */
         static sf::String get(sf::Uint32 id);
 
     protected:
+        /**
+         * Get current system language
+         * @return system language code (2 chars)
+         */
         static std::string current();
         static std::vector<sf::String> _dict;
     };

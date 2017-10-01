@@ -13,20 +13,46 @@
 #include "Config.h"
 
 namespace uGame {
+
+    /**
+     * Main application class
+     */
     class Application {
     public:
+        /**
+         * Constructor
+         * @param appDir - path to user home dir + .<gamename>
+         */
         Application(const std::string &appDir);
 
         ~Application();
 
+        /**
+         * Start main loop
+         */
         void run();
 
+        /**
+         * Mark loop to exit next cycle
+         */
         void quit() const;
 
+        /**
+         * Get states manager
+         * @return pointer to states manager
+         */
         StateManager *state() const;
 
+        /**
+         * Get game window
+         * @return pointer to main window
+         */
         sf::RenderWindow *window() const;
 
+        /**
+         * Get configuration
+         * @return pointer to configuration object
+         */
         Config *config() const;
 
     protected:
@@ -36,6 +62,9 @@ namespace uGame {
         sf::Clock _clock;
         bool _running;
 
+        /**
+         * Main loop
+         */
         void loop();
     };
 }
