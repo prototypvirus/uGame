@@ -32,8 +32,8 @@ namespace uGame {
 
     private:
         Application *_app;
-        sf::Texture *_bgTexture;
-        sf::Sprite *_bg;
+        sf::Texture _bgTexture;
+        sf::Sprite _bg;
         Window* _menuFrame;
         Button* _playBtn;
         Button* _profBtn;

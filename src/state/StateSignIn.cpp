@@ -9,11 +9,11 @@
 
 namespace uGame {
 
-    StateSignIn::StateSignIn() {}
+    StateSignIn::StateSignIn() :
+        _bgTexture(),
+        _bg() {}
 
     StateSignIn::~StateSignIn() {
-        delete _bgTexture;
-        delete _bg;
         delete _menuFrame;
         delete _labelUser;
         delete _labelPass;
@@ -25,12 +25,10 @@ namespace uGame {
 
     void StateSignIn::init(const Application *app) {
         _app = const_cast<Application *>(app);
-        _bgTexture = new sf::Texture();
         sf::InputStream *stream = AssetsManager::getStream("/imgs/ui/main_bg.jpg");
-        if(!_bgTexture->loadFromStream(*stream))
+        if(!_bgTexture.loadFromStream(*stream))
             L_WARN("Texture not load!");
-        _bg = new sf::Sprite();
-        _bg->setTexture(*_bgTexture);
+        _bg.setTexture(_bgTexture);
         delete stream;
         _menuFrame = new Window(Lang::get(6));
         int w = _menuFrame->getLocalBounds().width;
@@ -70,19 +68,19 @@ namespace uGame {
     }
 
     void StateSignIn::draw(sf::RenderWindow &render) {
-        render.draw(*_bg);
+        render.draw(_bg);
         render.draw(*_menuFrame);
     }
 
     void StateSignIn::centerContent(sf::Vector2u wsize) {
-        sf::FloatRect bgsize = _bg->getLocalBounds();
-        _bg->setOrigin(bgsize.width/2, bgsize.height/2);
-        _bg->setPosition(wsize.x/2, wsize.y/2);
+        sf::FloatRect bgsize = _bg.getLocalBounds();
+        _bg.setOrigin(bgsize.width/2, bgsize.height/2);
+        _bg.setPosition(wsize.x/2, wsize.y/2);
         float ratio = bgsize.width/bgsize.height;
         if((wsize.x/wsize.y) >= ratio) {
-            _bg->setScale((bgsize.height/wsize.y)*ratio, bgsize.height/wsize.y);
+            _bg.setScale((bgsize.height/wsize.y)*ratio, bgsize.height/wsize.y);
         }else{
-            _bg->setScale(bgsize.width/wsize.x, (bgsize.width/wsize.x)*ratio);
+            _bg.setScale(bgsize.width/wsize.x, (bgsize.width/wsize.x)*ratio);
         }
         sf::FloatRect fsize = _menuFrame->getLocalBounds();
         _menuFrame->setPosition((wsize.x-fsize.width)/2, (wsize.y-fsize.height)/2);

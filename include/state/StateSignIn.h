@@ -35,8 +35,8 @@ namespace uGame {
 
     protected:
         Application* _app;
-        sf::Texture *_bgTexture;
-        sf::Sprite *_bg;
+        sf::Texture _bgTexture;
+        sf::Sprite _bg;
         Window* _menuFrame;
         Label* _labelUser;
         Label* _labelPass;
