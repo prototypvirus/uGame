@@ -6,7 +6,6 @@
 #include "gui/InputBox.h"
 #include "gui/ControlsContainer.h"
 #include <SFML/OpenGL.hpp>
-#include <utils/Utils.h>
 
 namespace uGame {
 
@@ -174,15 +173,15 @@ namespace uGame {
 
     void InputBox::draw(sf::RenderTarget &target, sf::RenderStates states) const {
         states.transform *= getTransform();
-        const sf::Texture* t = states.texture; //fire bug (parent texture losing)
+        //const sf::Texture* t = states.texture; //fire bug (parent texture losing)
         states.texture = NULL;
         target.draw(_vertex, states);
-        states.texture = t;
         glEnable(GL_SCISSOR_TEST);
         sf::FloatRect rect = getGlobalBounds();
         glScissor(rect.left + _layout->points[0].x, rect.top + _layout->points[0].y, rect.left + rect.width - _layout->points[0].x, rect.top +  rect.height - _layout->points[0].y);
         target.draw(_text, states);
         glDisable(GL_SCISSOR_TEST);
+        //states.texture = t;
         if(_focus)
             target.draw(_cursor, states);
     }

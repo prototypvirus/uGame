@@ -6,6 +6,7 @@
 #include <utils/Logger.h>
 #include <core/Lang.h>
 #include <state/StateSignIn.h>
+#include <state/StateHeroList.h>
 #include "state/StateMenu.h"
 #include "core/StateManager.h"
 #include "core/Application.h"
@@ -73,6 +74,8 @@ namespace uGame {
         _menuFrame->update(time);
         if(_exitBtn->isPress() || _menuFrame->isClose())
             _app->state()->close();
+        if(_playBtn->isPress())
+            _app->state()->open(new StateHeroList());
         if(_profBtn->isPress())
             _app->state()->open(new StateSignIn());
     }
