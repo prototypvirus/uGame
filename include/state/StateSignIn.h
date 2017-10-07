@@ -19,18 +19,40 @@ namespace uGame {
 
     class Application;
 
+    /**
+     * Sign-in into account
+     */
     class StateSignIn : public GameState {
     public:
+        /**
+         * Constructor
+         */
         StateSignIn();
 
         virtual ~StateSignIn();
 
+        /**
+         * Initialize (instead constructor)
+         * @param app - pointer to main application object
+         */
         void init(const Application *app) override;
 
+        /**
+         * Handle event
+         * @param event - event object
+         */
         void event(const sf::Event &event) override;
 
+        /**
+         * Handle updates
+         * @param time - time from previous update
+         */
         void update(const float time) override;
 
+        /**
+         * Handle draws
+         * @param render - pointer to main window (renderer)
+         */
         void draw(sf::RenderWindow &render) override;
 
     protected:
@@ -44,6 +66,11 @@ namespace uGame {
         Button* _backBtn;
         InputBox* _userInput;
         InputBox* _passInput;
+
+        /**
+         * Center elements of window
+         * @param wsize - game window size
+         */
         void centerContent(sf::Vector2u wsize);
     };
 }

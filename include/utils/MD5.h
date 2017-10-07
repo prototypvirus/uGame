@@ -1,6 +1,37 @@
 //
 // Created by symbx on 06.08.17.
 //
+/* MD5
+ converted to C++ class by Frank Thilo (thilo@unix-ag.org)
+ for bzflag (http://www.bzflag.org)
+
+   based on:
+
+   md5.h and md5.c
+   reference implementation of RFC 1321
+
+   Copyright (C) 1991-2, RSA Data Security, Inc. Created 1991. All
+rights reserved.
+
+License to copy and use this software is granted provided that it
+is identified as the "RSA Data Security, Inc. MD5 Message-Digest
+Algorithm" in all material mentioning or referencing this software
+or this function.
+
+License is also granted to make and use derivative works provided
+that such works are identified as "derived from the RSA Data
+Security, Inc. MD5 Message-Digest Algorithm" in all material
+mentioning or referencing the derived work.
+
+RSA Data Security, Inc. makes no representations concerning either
+the merchantability of this software or the suitability of this
+software for any particular purpose. It is provided "as is"
+without express or implied warranty of any kind.
+
+These notices must be retained in any copies of any part of this
+documentation and/or software.
+
+*/
 
 #ifndef UGAME_MD5_H
 #define UGAME_MD5_H
@@ -10,22 +41,55 @@
 
 namespace uGame {
 
+    /**
+     * MD5 class
+     */
     class MD5 {
     public:
         typedef unsigned int size_type; // must be 32bit
 
+        /**
+         * Construct empty object
+         */
         MD5();
 
+        /**
+         * Construct object based on given string
+         * @param text - text to hash
+         */
         MD5(const std::string &text);
 
+        /**
+         * Append data to hash
+         * @param buf - buffer
+         * @param length - length of data
+         */
         void update(const unsigned char *buf, size_type length);
 
+        /**
+         * Append data to hash
+         * @param buf - buffer
+         * @param length - length of data
+         */
         void update(const char *buf, size_type length);
 
+        /**
+         * Finalize object for returning hash
+         * @return self object
+         */
         MD5 &finalize();
 
+        /**
+         * Get result hash
+         * @return computed hash in hex string
+         */
         std::string hexdigest() const;
 
+        /**
+         * Append data to hash
+         * @param md5
+         * @return
+         */
         friend std::ostream &operator<<(std::ostream &, MD5 md5);
 
     private:

@@ -16,18 +16,40 @@ namespace uGame {
 
     class Application;
 
+    /**
+     * State of app main menu
+     */
     class StateMenu : public GameState {
     public:
+        /**
+         * Constructor
+         */
         StateMenu();
 
         ~StateMenu();
 
+        /**
+         * Initialize (instead constructor)
+         * @param app - pointer to main application object
+         */
         void init(const Application *app) override;
 
+        /**
+         * Handle event
+         * @param event - event object
+         */
         void event(const sf::Event &event) override;
 
+        /**
+         * Handle updates
+         * @param time - time from previous update
+         */
         void update(const float time) override;
 
+        /**
+         * Handle draws
+         * @param render - pointer to main window (renderer)
+         */
         void draw(sf::RenderWindow &render) override;
 
     private:
@@ -40,6 +62,11 @@ namespace uGame {
         Button* _optsBtn;
         Button* _exitBtn;
         Label* _profile;
+
+        /**
+         * Center elements of window
+         * @param wsize - game window size
+         */
         void centerContent(sf::Vector2u wsize);
     };
 }

@@ -14,23 +14,55 @@
 #include "UI.h"
 
 namespace uGame {
-
+    /**
+     * In-Game window
+     */
     class Window : public ControlsContainer {
     public:
+        /**
+         * Constructor
+         * @param title - title of window
+         */
         Window(const sf::String &title);
         ~Window();
 
+        /**
+         * Handle events
+         * @param event - event object
+         * @return event handled (if true do not send next control)
+         */
         bool event(const sf::Event &event) override;
 
+        /**
+         * Handle updates
+         * @param time - time elapsed from last update
+         */
         void update(const float time) override;
 
+        /**
+         * Get button bounds (local - position is 0x0)
+         * @return rectangle of button
+         */
         sf::FloatRect getLocalBounds() const;
 
+        /**
+         * Get button bounds (with position)
+         * @return rectangle of button
+         */
         sf::FloatRect getGlobalBounds() const;
 
+        /**
+         * If user click close button on window
+         * @return clicked
+         */
         bool isClose();
 
     protected:
+        /**
+         * Draw button
+         * @param target - renderer
+         * @param states - states (textures, colors, etc.)
+         */
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
     private:
