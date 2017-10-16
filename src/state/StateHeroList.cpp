@@ -6,6 +6,7 @@
 #include <core/AssetsManager.h>
 #include <core/Application.h>
 #include <utils/Logger.h>
+#include <state/StatePlay.h>
 #include "state/StateHeroList.h"
 
 namespace uGame {
@@ -43,6 +44,8 @@ namespace uGame {
         if (event.type == sf::Event::KeyPressed) {
             if (event.key.code == sf::Keyboard::Escape)
                 _app->state()->close();
+            if (event.key.code == sf::Keyboard::Space)
+                _app->state()->open(new StatePlay());
         }
     }
 

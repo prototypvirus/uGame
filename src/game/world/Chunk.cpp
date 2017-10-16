@@ -89,9 +89,9 @@ namespace uGame {
 
     void Chunk::load(int world, int layer, int x, int y) {
         sf::InputStream* mapStream = AssetsManager::getStream(
-                "/terrain/world-"+std::to_string(world)+
-                "/layer-"+std::to_string(layer)+
-                '/'+std::to_string(x)+'x'+std::to_string(y)+".chunk");
+                "/world/dim-"+std::to_string(world)+
+                "/lvl-"+std::to_string(layer)+
+                '/'+std::to_string(x)+'x'+std::to_string(y)+".chk");
 
         //Images count
         sf::Uint8 imgsCount;

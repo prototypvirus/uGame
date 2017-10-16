@@ -7,6 +7,7 @@
 
 #include <core/GameState.h>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <game/world/Chunk.h>
 
 namespace uGame {
     /**
@@ -44,6 +45,7 @@ namespace uGame {
 
     protected:
         Application* _app;
+        Chunk* _chunk;
     };
 }
 
