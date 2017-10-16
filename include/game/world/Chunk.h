@@ -8,6 +8,11 @@
 #include <SFML/Graphics/Drawable.hpp>
 #include <SFML/Window/Event.hpp>
 #include <core/Application.h>
+#include <game/Tile.h>
+#include <game/TileBlock.h>
+#include <game/TileObject.h>
+#include <game/TileObjectBlock.h>
+#include <Constants.h>
 
 namespace uGame {
     class Chunk : public sf::Drawable {
@@ -20,9 +25,22 @@ namespace uGame {
 
         void update(const float time);
 
+        void load(int world, int layer, int x, int y);
+
     protected:
         void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
 
+    private:
+        Application* _app;
+        std::vector<sf::Texture> _images;
+        std::vector<Tile*> _tiles;
+        TileBlock* _tilesMap[MAP_LAYER_TILES];
+        bool _solidMap[MAP_LAYER_TILES];
+        sf::View _view;
+        std::vector<sf::Vertex> _vertex;
+        std::vector<TileObject*> _objects;
+        TileObjectBlock* _objectMap[MAP_TILES_COUNT];
+        sf::FloatRect _calcView(int w, int h);
     };
 }
 
