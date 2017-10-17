@@ -19,7 +19,7 @@
 namespace uGame {
 
     std::string Utils::getHome() {
-        std::string dir("");
+        std::string dir;
 #ifdef _OS_IOS
 
 #elif _OS_ANDROID

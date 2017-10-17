@@ -176,7 +176,7 @@ namespace uGame {
             sf::Int64 loadLen = 0;
             char *buffer[1024];
             std::ofstream file(local, std::ofstream::binary);
-            while (1) {
+            while (true) {
                 ssize_t r = recv(sock, buffer, 1024, 0);
                 if (r == 0)
                     break;
@@ -225,7 +225,7 @@ namespace uGame {
             L_ERR("No connection or bad response! ("+std::to_string(resp.getStatus())+')');
             return;
         }
-        std::string body = resp.getBody();
+        const std::string &body = resp.getBody();
         if (body.length() % 40 != 0) {
             AssetsManager::_state = BAD_RESP;
             L_ERR("Bad response! (len: " + std::to_string(body.length()) + ')');
@@ -244,7 +244,7 @@ namespace uGame {
             L_INFO("Package " + std::to_string(i) + " with hash " + hash);
             stream.read(reinterpret_cast<char *>(&size), sizeof(sf::Uint64));
             if (!checkHash(i, hash)) {
-                struct Download d;
+                struct Download d{};
                 d.id = i;
                 d.size = size;
                 AssetsManager::_downloads.insert(AssetsManager::_downloads.begin(), d);
@@ -294,7 +294,7 @@ namespace uGame {
     }
 
     int AssetsManager::connect(const std::string &url) {
-        struct addrinfo hints;
+        struct addrinfo hints{};
         memset(&hints, 0, sizeof(hints));
         hints.ai_family = AF_UNSPEC;
         hints.ai_socktype = SOCK_STREAM;

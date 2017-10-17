@@ -16,7 +16,8 @@ namespace uGame {
         _vertex(sf::TrianglesStrip, 4),
         _tick(0),
         _width(width),
-        _return(false) {
+        _return(false),
+        _range(0) {
         _layout = UI::getLayout("/layouts/inputbox.gui");
 
         _vertex[0].position = sf::Vector2f(0, 0);
@@ -236,7 +237,7 @@ namespace uGame {
     }
 
     sf::FloatRect InputBox::getLocalBounds() const {
-        return sf::FloatRect(0, 0, _width, _layout->floats[0]);
+        return {0, 0, _width, _layout->floats[0]};
     }
 
     sf::FloatRect InputBox::getGlobalBounds() const {

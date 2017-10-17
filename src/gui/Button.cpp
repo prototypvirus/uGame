@@ -119,7 +119,7 @@ namespace uGame {
     }
 
     sf::FloatRect Button::getLocalBounds() const {
-        return sf::FloatRect(0, 0, _size.x, _size.y);
+        return {0, 0, _size.x, _size.y};
     }
 
     sf::FloatRect Button::getGlobalBounds() const {

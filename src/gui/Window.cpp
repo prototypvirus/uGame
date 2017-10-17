@@ -58,7 +58,7 @@ namespace uGame {
     }
 
     sf::FloatRect Window::getLocalBounds() const {
-        return sf::FloatRect(0, 0, _size.x, _size.y);
+        return {0, 0, _size.x, _size.y};
     }
 
     sf::FloatRect Window::getGlobalBounds() const {
