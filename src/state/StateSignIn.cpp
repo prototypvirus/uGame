@@ -49,10 +49,6 @@ namespace uGame {
     }
 
     void StateSignIn::event(const sf::Event &event) {
-        if (event.type == sf::Event::Resized) {
-            sf::Vector2u wsize(event.size.width, event.size.height);
-            centerContent(wsize);
-        }
         if(_menuFrame != NULL &&_menuFrame->event(event))
                 return;
         if (event.type == sf::Event::KeyPressed) {
@@ -92,5 +88,10 @@ namespace uGame {
         _backBtn->setPosition((fsize.width - btn.width)/2, 92+btn.height*3);
         _userInput->setPosition(10, 120);
         _passInput->setPosition(10, 172);
+    }
+
+    void StateSignIn::resize(int w, int h) {
+        sf::Vector2u wsize(w, h);
+        centerContent(wsize);
     }
 }

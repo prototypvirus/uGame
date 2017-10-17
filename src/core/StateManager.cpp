@@ -58,6 +58,10 @@ namespace uGame {
         }*/
         if (!_states.empty())
             _states.back()->event(event);
+        if(event.type == sf::Event::Resized)
+            for(auto& s : _states) {
+                s->resize(event.size.width, event.size.height);
+            }
     }
 
     void StateManager::update(const float time) {

@@ -31,4 +31,8 @@ namespace uGame {
     void StatePlay::draw(sf::RenderWindow &render) {
         render.draw(*_chunk);
     }
+
+    void StatePlay::resize(int w, int h) {
+        //ignore
+    }
 }

@@ -50,6 +50,8 @@ namespace uGame {
          */
         void draw(sf::RenderWindow &render) override;
 
+        void resize(int w, int h) override;
+
     private:
         sf::Sprite *_logo;
         sf::Text *_loadText;

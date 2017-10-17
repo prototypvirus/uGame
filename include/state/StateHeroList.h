@@ -49,6 +49,8 @@ namespace uGame {
          */
         void draw(sf::RenderWindow &render) override;
 
+        void resize(int w, int h) override;
+
     protected:
         Application* _app;
         sf::Texture _bgTexture;

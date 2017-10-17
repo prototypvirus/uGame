@@ -55,10 +55,6 @@ namespace uGame {
     }
 
     void StateMenu::event(const sf::Event &event) {
-        if (event.type == sf::Event::Resized) {
-            sf::Vector2u wsize(event.size.width, event.size.height);
-            centerContent(wsize);
-        }
         if(_menuFrame != NULL && _menuFrame->event(event))
             return;
 
@@ -102,5 +98,10 @@ namespace uGame {
         _profBtn->setPosition((fsize.width - btn.width)/2, 92+btn.height);
         _optsBtn->setPosition((fsize.width - btn.width)/2, 92+btn.height*2);
         _exitBtn->setPosition((fsize.width - btn.width)/2, 92+btn.height*3);
+    }
+
+    void StateMenu::resize(int w, int h) {
+        sf::Vector2u wsize(w, h);
+        centerContent(wsize);
     }
 }

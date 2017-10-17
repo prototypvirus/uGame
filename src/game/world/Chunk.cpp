@@ -67,6 +67,22 @@ namespace uGame {
             const sf::FloatRect rect = _calcView(event.size.width, event.size.height);
             _view.reset(rect);
         }
+        if(event.type == sf::Event::KeyPressed) {
+            switch (event.key.code) {
+                case sf::Keyboard::Left:
+                    _view.move(-10, 0);
+                    break;
+                case sf::Keyboard::Right:
+                    _view.move(10, 0);
+                    break;
+                case sf::Keyboard::Up:
+                    _view.move(0, -10);
+                    break;
+                case sf::Keyboard::Down:
+                    _view.move(0, 10);
+                    break;
+            }
+        }
     }
 
     void Chunk::update(const float time) {

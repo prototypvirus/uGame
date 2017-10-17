@@ -94,9 +94,6 @@ namespace uGame {
     }
 
     void StateLoading::event(const sf::Event &event) {
-        if (event.type == sf::Event::Resized) {
-            centerContent(sf::Vector2u(event.size.width, event.size.height));
-        }
     }
 
     void StateLoading::draw(sf::RenderWindow &render) {
@@ -134,5 +131,9 @@ namespace uGame {
     void StateLoading::setText(const std::string &msg) {
         _loadText->setString(msg);
         centerText(_app->window()->getSize());
+    }
+
+    void StateLoading::resize(int w, int h) {
+        centerContent(sf::Vector2u(w, h));
     }
 }

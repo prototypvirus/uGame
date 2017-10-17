@@ -33,11 +33,6 @@ namespace uGame {
     }
 
     void StateHeroList::event(const sf::Event &event) {
-        if (event.type == sf::Event::Resized) {
-            sf::Vector2u wsize(event.size.width, event.size.height);
-            centerContent(wsize);
-        }
-
         if(_menuFrame != NULL && _menuFrame->event(event))
             return;
 
@@ -71,5 +66,10 @@ namespace uGame {
 
         sf::FloatRect fsize = _menuFrame->getLocalBounds();
         _menuFrame->setPosition((wsize.x-fsize.width)/2, (wsize.y-fsize.height)/2);
+    }
+
+    void StateHeroList::resize(int w, int h) {
+        sf::Vector2u wsize(w, h);
+        centerContent(wsize);
     }
 }

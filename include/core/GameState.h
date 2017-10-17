@@ -41,6 +41,12 @@ namespace uGame {
          */
         virtual void draw(sf::RenderWindow &render) = 0;
 
+        /**
+         * Handle resize of window (paused states do not receive events, extracted to method)
+         * @param w - Width
+         * @param h - Height
+         */
+        virtual void resize(int w, int h) = 0;
     };
 }
 
